@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新書銷量預測工具 v2.0</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  /* Gold / Cream / Red theme — 金尉出版社 */
+  --gold: #b8860b;
+  --gold-dark: #996515;
+  --gold-light: #f5e6b8;
+  --gold-glow: #d4a517;
+  --cream: #faf6ed;
+  --cream-dark: #f0e8d4;
+  --red: #b22234;
+  --red-dark: #8b1a2b;
+  --red-light: #f8e0e4;
+  --red-soft: #d94452;
+  --success: #2e7d32;
+  --success-light: #e8f5e9;
+  --warm-50: #fffdf7;
+  --warm-100: #faf6ed;
+  --warm-200: #f0e8d4;
+  --warm-300: #ddd0b0;
+  --warm-500: #9e8e6e;
+  --warm-700: #5c4a2a;
+  --warm-900: #3a2e1a;
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(58,46,26,.08), 0 1px 3px rgba(58,46,26,.06);
+  --shadow-lg: 0 12px 24px rgba(58,46,26,.12), 0 4px 8px rgba(58,46,26,.06);
+  --shadow-gold: 0 2px 12px rgba(184,134,11,.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI','Microsoft JhengHei',sans-serif;
+  background: linear-gradient(160deg, #faf6ed 0%, #f5f0e3 40%, #f0e8d4 100%);
+  color: var(--warm-900); line-height:1.6; min-height:100vh;
+}
+.container { max-width:1140px; margin:0 auto; padding:28px 24px; }
+
+/* Header */
+header { text-align:center; margin-bottom:36px; padding:24px 0 20px; position:relative; }
+header::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:120px; height:3px; background:linear-gradient(90deg, transparent, var(--gold), transparent); border-radius:2px; }
+header h1 {
+  font-size:30px; font-weight:800; letter-spacing:1px;
+  background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-glow) 50%, var(--gold-dark) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:6px;
+}
+header .sub { font-size:13px; color:var(--warm-500); letter-spacing:.5px; }
+
+/* Layout */
+.main-grid { display:grid; grid-template-columns:400px 1fr; gap:28px; align-items:start; }
+@media(max-width:880px) { .main-grid { grid-template-columns:1fr; } }
+
+/* Card */
+.card {
+  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:26px; margin-bottom:22px; border:1px solid rgba(184,134,11,.08);
+  position:relative; overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--gold), var(--gold-glow), var(--gold));
+  opacity:0.6;
+}
+.card h2 {
+  font-size:16px; color:var(--warm-700); margin-bottom:18px; padding-bottom:10px;
+  border-bottom:1px solid var(--cream-dark); font-weight:700; letter-spacing:.3px;
+}
+.card h3 { font-size:15px; color:var(--warm-700); margin:16px 0 10px; }
+
+/* Form */
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:12px; font-weight:700; color:var(--warm-700); margin-bottom:5px; text-transform:uppercase; letter-spacing:.3px; }
+.field .hint { font-size:11px; color:var(--warm-500); margin-top:3px; }
+.field input, .field select {
+  width:100%; padding:9px 14px; border:1.5px solid var(--warm-300); border-radius:8px;
+  font-size:14px; transition:all .25s; background:var(--warm-50); color:var(--warm-900);
+}
+.field input:focus, .field select:focus {
+  outline:none; border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,134,11,.15);
+  background:#fff;
+}
+.field input[type=number] { -moz-appearance:textfield; }
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+.divider { border:none; border-top:1.5px solid var(--cream-dark); margin:20px 0; }
+
+/* Author type selector */
+.type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.type-btn {
+  padding:12px 10px; border:2px solid var(--warm-300); border-radius:10px; background:var(--warm-50);
+  cursor:pointer; text-align:center; transition:all .25s; font-size:13px;
+}
+.type-btn:hover { border-color:var(--gold); background:var(--gold-light); }
+.type-btn.active {
+  border-color:var(--gold); background:linear-gradient(135deg, var(--gold-light), #fdf3d7);
+  box-shadow:var(--shadow-gold);
+}
+.type-btn .type-label { font-weight:800; font-size:14px; display:block; color:var(--warm-900); }
+.type-btn .type-desc { font-size:11px; color:var(--warm-500); margin-top:3px; }
+.type-btn.active .type-label { color:var(--gold-dark); }
+
+/* Predict button */
+.btn-predict {
+  width:100%; padding:15px; border:none; border-radius:10px;
+  font-size:16px; font-weight:800; cursor:pointer; transition:all .25s; margin-top:10px;
+  background:linear-gradient(135deg, var(--red) 0%, var(--red-soft) 100%);
+  color:#fff; letter-spacing:1px;
+  box-shadow:0 4px 15px rgba(178,34,52,.3);
+}
+.btn-predict:hover { background:linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%); box-shadow:0 6px 20px rgba(178,34,52,.4); transform:translateY(-1px); }
+.btn-predict:active { transform:translateY(0) scale(.98); }
+
+/* Results */
+.results-area { display:none; }
+.results-area.show { display:block; }
+
+.kpi-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin-bottom:18px; }
+.kpi {
+  background:linear-gradient(135deg, var(--warm-50), var(--cream)); border-radius:10px;
+  padding:16px; text-align:center; border-left:4px solid var(--gold);
+  box-shadow:0 1px 4px rgba(58,46,26,.06);
+}
+.kpi.success { border-left-color:var(--success); }
+.kpi.warning { border-left-color:var(--gold-glow); }
+.kpi.danger { border-left-color:var(--red); }
+.kpi .kpi-label { font-size:11px; color:var(--warm-500); margin-bottom:3px; text-transform:uppercase; letter-spacing:.3px; font-weight:600; }
+.kpi .kpi-value { font-size:22px; font-weight:800; color:var(--warm-900); }
+.kpi .kpi-sub { font-size:11px; color:var(--warm-500); margin-top:3px; }
+
+.chart-box { position:relative; height:300px; margin:12px 0; }
+.chart-box-sm { position:relative; height:220px; margin:12px 0; }
+
+/* Benchmark bar */
+.bm-bar { display:flex; align-items:center; gap:8px; margin:8px 0; padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.5; }
+.bm-bar.pass { background:var(--success-light); color:#1b5e20; border:1px solid #a5d6a7; }
+.bm-bar.warn { background:var(--gold-light); color:var(--gold-dark); border:1px solid var(--warm-300); }
+.bm-bar.fail { background:var(--red-light); color:var(--red-dark); border:1px solid #f5c6cb; }
+
+/* Params table */
+.params-table { width:100%; font-size:13px; border-collapse:collapse; }
+.params-table th, .params-table td { padding:8px 12px; text-align:left; border-bottom:1px solid var(--cream-dark); }
+.params-table th { color:var(--warm-500); font-weight:700; width:42%; font-size:12px; }
+.params-table td { font-family:'Consolas','Courier New',monospace; color:var(--warm-900); }
+.params-table tr:hover { background:var(--warm-50); }
+
+/* Compare */
+.compare-table { width:100%; font-size:13px; border-collapse:collapse; }
+.compare-table th, .compare-table td { padding:9px 10px; border-bottom:1px solid var(--cream-dark); }
+.compare-table th { background:var(--cream); font-weight:700; text-align:left; color:var(--warm-700); font-size:12px; }
+.compare-table td { text-align:right; }
+.compare-table td:first-child { text-align:left; }
+.compare-table .highlight { background:linear-gradient(90deg, rgba(184,134,11,.08), rgba(184,134,11,.03)); font-weight:700; }
+.compare-table tr:hover { background:var(--warm-50); }
+
+/* Reference cases */
+.ref-cases { margin-top:16px; }
+.ref-case { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-radius:8px; margin-bottom:6px; background:var(--warm-50); font-size:13px; }
+.ref-case .name { font-weight:600; }
+.ref-case .val { color:var(--warm-500); }
+
+/* Empty state */
+.empty-state { text-align:center; padding:60px 20px; color:var(--warm-500); }
+.empty-state::before { opacity:0.3; }
+.empty-state .icon { font-size:52px; margin-bottom:14px; opacity:.7; }
+.empty-state p { font-size:15px; line-height:1.7; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--cream); }
+::-webkit-scrollbar-thumb { background:var(--warm-300); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+
+/* Print */
+@media print {
+  .input-panel { display:none; }
+  .main-grid { grid-template-columns:1fr; }
+  .results-area { display:block !important; }
+  body { background:#fff; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>新書銷量預測工具 v2.0</h1>
+    <div class="sub">金尉出版社 &nbsp;|&nbsp; 三層疊代預測法 + 電子書雙通道 &nbsp;|&nbsp; 行銷用互動版</div>
+  </header>
+
+  <div class="main-grid">
+    <!-- ===== LEFT: Input Panel ===== -->
+    <div class="input-panel">
+      <div class="card">
+        <h2>作者資料</h2>
+
+        <div class="field">
+          <label>作者名稱</label>
+          <input type="text" id="authorName" placeholder="例: 翁建原(肥羊)">
+        </div>
+
+        <div class="field">
+          <label>作者類型</label>
+        </div>
+        <div class="type-grid">
+          <div class="type-btn active" data-type="KOP" onclick="selectType(this)">
+            <span class="type-label">KOP 長銷型</span>
+            <span class="type-desc">權威型 KOL，長銷穩健</span>
+          </div>
+          <div class="type-btn" data-type="KOC" onclick="selectType(this)">
+            <span class="type-label">KOC 猛爆型</span>
+            <span class="type-desc">社群流量高，初期爆發</span>
+          </div>
+          <div class="type-btn" data-type="Co-Branding" onclick="selectType(this)">
+            <span class="type-label">Co-Branding</span>
+            <span class="type-desc">繼承導師品牌</span>
+          </div>
+          <div class="type-btn" data-type="Debut" onclick="selectType(this)">
+            <span class="type-label">新人 Debut</span>
+            <span class="type-desc">無既有受眾</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>社群粉絲數</label>
+          <div class="hint">填寫出書時各平台的粉絲數（沒有的填 0）</div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>YouTube 訂閱</label>
+            <input type="number" id="ytSubs" value="0" min="0">
+          </div>
+          <div class="field">
+            <label>Instagram 粉絲</label>
+            <input type="number" id="igFollowers" value="0" min="0">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Facebook 粉絲</label>
+            <input type="number" id="fbFollowers" value="0" min="0">
+          </div>
+          <div class="field">
+            <label>股市爆料同學會</label>
+            <input type="number" id="cmoney" value="0" min="0">
+            <div class="hint">CMoney 社團追蹤數</div>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>課程/App 學員數</label>
+            <input type="number" id="courseStudents" value="0" min="0">
+            <div class="hint">付費課程、App 訂閱者</div>
+          </div>
+          <div class="field">
+            <label>導師前作銷量</label>
+            <input type="number" id="mentorSales" value="0" min="0">
+            <div class="hint">僅 Co-Branding 需填</div>
+          </div>
+        </div>
+
+        <hr class="divider">
+        <h2>書籍資料</h2>
+
+        <div class="field">
+          <label>書名</label>
+          <input type="text" id="bookTitle" placeholder="例: 《億元肥羊零成本買股術》">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>書籍類別</label>
+            <select id="bookCategory">
+              <option value="finance" selected>投資理財 / 股票</option>
+              <option value="growth">心靈勵志 / 個人成長</option>
+              <option value="business">商業經營 / 創業</option>
+            </select>
+            <div class="hint">影響受眾轉換率修正</div>
+          </div>
+          <div class="field">
+            <label>定價 (NTD)</label>
+            <input type="number" id="bookPrice" value="380" min="100" max="1500">
+          </div>
+        </div>
+        <div class="row3">
+          <div class="field">
+            <label>此作者第幾本書</label>
+            <input type="number" id="nthBook" value="1" min="1" max="20">
+          </div>
+          <div class="field">
+            <label>是否為續作</label>
+            <select id="isSequel">
+              <option value="0" selected>否</option>
+              <option value="1">是（同書續集）</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-predict" onclick="runPrediction()">預測銷量</button>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT: Results Panel ===== -->
+    <div class="results-panel">
+      <!-- Empty state -->
+      <div class="card empty-state" id="emptyState">
+        <div class="icon">&#128218;</div>
+        <p>填寫左側作者與書籍資料<br>按下「預測銷量」查看結果</p>
+      </div>
+
+      <!-- Results (hidden until prediction) -->
+      <div class="results-area" id="resultsArea">
+
+        <!-- Header -->
+        <div class="card" id="resultHeader">
+          <h2 id="resultTitle">預測結果</h2>
+          <div class="kpi-row" id="kpiRow"></div>
+        </div>
+
+        <!-- Monthly curve chart -->
+        <div class="card">
+          <h2>紙本書 12 個月銷售曲線預測</h2>
+          <div class="chart-box"><canvas id="curveChart"></canvas></div>
+        </div>
+
+        <!-- Ebook chart -->
+        <div class="card">
+          <h2>電子書 12 個月銷售曲線預測</h2>
+          <div class="chart-box-sm"><canvas id="ebookChart"></canvas></div>
+        </div>
+
+        <!-- Benchmark -->
+        <div class="card">
+          <h2>首月爆發量交叉驗證</h2>
+          <div id="benchmarkArea"></div>
+        </div>
+
+        <!-- Reference cases -->
+        <div class="card">
+          <h2>同類型參考案例</h2>
+          <div class="compare-table-wrap" id="refCasesArea"></div>
+        </div>
+
+        <!-- Params transparency -->
+        <div class="card">
+          <h2>模型參數（透明度）</h2>
+          <table class="params-table" id="paramsTable"></table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// GEM v2.0 Config (from config_v2.yaml)
+// ============================================================
+const CONFIG = {
+  conversion_rates: {
+    inner: { min:0.80, max:1.00 },
+    // 基準 CR (投資理財類)，其他類別乘以 category_multiplier
+    // 校準依據: 莎拉王(6.5萬FB→首月6107), 肥羊(8萬FB→首月4502), 鬼手易生(純CMoney→首月2056)
+    middle: { min:0.025, max:0.060 },
+    outer: { min:0.003, max:0.008 },
+    // 股市爆料同學會: 財經垂直社群，高互動高轉換
+    cmoney: { min:0.15, max:0.28 },
+  },
+  // 書籍類別對 CR 的影響
+  // 投資理財粉絲購買力最強，心靈勵志/個人成長次之
+  category_multiplier: {
+    finance:  1.00,  // 投資理財: 基準 (三案例校準)
+    growth:   0.60,  // 心靈勵志: 受眾較廣但購買衝動較低
+    business: 0.75,  // 商業經營: 介於兩者之間
+  },
+  decay_rates: {
+    KOP:          { monthly_decay:0.18 },
+    KOC:          { monthly_decay:0.35 },
+    'Co-Branding':{ monthly_decay:0.22 },
+    Debut:        { monthly_decay:0.30 },
+  },
+  correction_factors: {
+    // 財經類 deflation 上調: 受眾購買意願強於一般書籍
+    global_deflation: { min:0.70, max:0.85 },
+    sequel_discount: 0.70,
+    high_price_threshold: 600,
+    high_price_bonus: 1.10,
+    nth_book_decay: 0.92,
+  },
+  trend_multiplier: { KOP:1.10, KOC:1.20, 'Co-Branding':1.15, Debut:1.08 },
+  distribution: { minimum_stock: 500 },
+  print_run: { target_months:3, cobranding_mentor_ratio:{ min:0.60, max:0.70 } },
+  ebook_channel: {
+    ebook_ratio: {
+      KOP:          { min:0.05, max:0.08 },
+      KOC:          { min:0.10, max:0.18 },
+      'Co-Branding':{ min:0.08, max:0.12 },
+      Debut:        { min:0.08, max:0.15 },
+    },
+    decay_rates: {
+      KOP:          { monthly_decay:0.05 },
+      KOC:          { monthly_decay:0.15 },
+      'Co-Branding':{ monthly_decay:0.10 },
+      Debut:        { monthly_decay:0.12 },
+    },
+  },
+  first_month_benchmarks: {
+    KOP:          { median:5000, range:[3500,10000] },
+    KOC:          { median:5500, range:[3000,8000] },
+    'Co-Branding':{ median:2000, range:[1500,3000] },
+    Debut:        { median:1500, range:[750,3000] },
+  },
+};
+
+// Reference cases for comparison (real data)
+const REF_CASES = {
+  KOP: [
+    { name:'存100張金融股', author:'陳重銘', m1:9907, fy:16260, fb:580000 },
+    { name:'活用技術分析寶典', author:'朱家泓', m1:3951, fy:13150, fb:30000 },
+    { name:'富媽媽窮媽媽', author:'陳重銘', m1:5500, fy:11871, fb:580000 },
+  ],
+  KOC: [
+    { name:'新式型態學', author:'莎拉王', m1:6107, fy:11252, fb:65000, cm:40000 },
+    { name:'艾蜜莉存股術2.0', author:'艾蜜莉', m1:6371, fy:14651, fb:450000, cm:0 },
+    { name:'短線終極戰法', author:'權證小哥', m1:4683, fy:9257, fb:110000, cm:0 },
+    { name:'教官財報有問題', author:'楊禮軒', m1:7365, fy:11281, fb:28000, cm:0 },
+    { name:'可轉債存股術', author:'蕭啟斌', m1:4299, fy:12597, fb:8000, cm:0 },
+    { name:'億元肥羊零成本買股術', author:'翁建原(肥羊)', m1:4502, fy:null, fb:80000, cm:17462, note:'首月實際' },
+    { name:'鬼道致富', author:'鬼手易生', m1:2056, fy:2917, fb:0, cm:30000 },
+  ],
+  'Co-Branding': [
+    { name:'學會走圖SOP', author:'林穎', m1:2032, fy:14282, fb:5000, mentor:'朱家泓' },
+  ],
+  Debut: [
+    { name:'人生流當品', author:'秦嗣林', m1:3207, fy:7552, fb:0 },
+  ],
+};
+
+// ============================================================
+// Prediction Engine (port of predictor_v2.py)
+// ============================================================
+function buildCurve(totalPotential, monthlyDecay) {
+  const retention = 1.0 - monthlyDecay;
+  const geoSum = retention === 1.0 ? 12.0 : (1.0 - Math.pow(retention,12)) / (1.0 - retention);
+  const peak = totalPotential / geoSum;
+  const monthly = [];
+  for (let t=0; t<12; t++) monthly.push(Math.max(1, Math.round(peak * Math.pow(retention, t))));
+  return monthly;
+}
+
+function cumulative(monthly) {
+  const cum = []; let total = 0;
+  for (const s of monthly) { total += s; cum.push(total); }
+  return cum;
+}
+
+function totalAtMonth(monthly, month) {
+  const cum = cumulative(monthly);
+  if (month <= 0) return 0;
+  if (month > cum.length) return cum[cum.length-1];
+  return cum[month-1];
+}
+
+function predict(author, book) {
+  const cfg = CONFIG;
+  const at = author.type;
+  const cr = cfg.conversion_rates;
+  const catMul = cfg.category_multiplier[book.category] || 1.0;
+
+  // Step 1: Audience layers (CR adjusted by category)
+  const innerAudience = author.courseStudents;
+  const generalSocial = author.ytSubs + author.igFollowers + author.fbFollowers;
+  const cmoneyFollowers = author.cmoney;
+  const totalSocial = generalSocial + cmoneyFollowers;
+
+  const innerLow  = Math.floor(innerAudience * cr.inner.min);
+  const innerHigh = Math.floor(innerAudience * cr.inner.max);
+  // 一般社群 (YT/IG/FB) → middle CR × 類別修正
+  const middleLow  = Math.floor(generalSocial * cr.middle.min * catMul);
+  const middleHigh = Math.floor(generalSocial * cr.middle.max * catMul);
+  // 股市爆料同學會 → 財經垂直社群 × 類別修正
+  const cmoneyLow  = Math.floor(cmoneyFollowers * cr.cmoney.min * catMul);
+  const cmoneyHigh = Math.floor(cmoneyFollowers * cr.cmoney.max * catMul);
+  // 外層觸及 (一般社群 x5)
+  const outerReach = generalSocial * 5;
+  const outerLow  = Math.floor(outerReach * cr.outer.min * catMul);
+  const outerHigh = Math.floor(outerReach * cr.outer.max * catMul);
+
+  let nCommittedLow  = innerLow + middleLow + cmoneyLow + outerLow;
+  let nCommittedHigh = innerHigh + middleHigh + cmoneyHigh + outerHigh;
+
+  // Step 2: Corrections
+  const corr = cfg.correction_factors;
+  let nAdjLow  = nCommittedLow  * corr.global_deflation.min;
+  let nAdjHigh = nCommittedHigh * corr.global_deflation.max;
+
+  if (book.isSequel) {
+    nAdjLow  = Math.floor(nAdjLow  * corr.sequel_discount);
+    nAdjHigh = Math.floor(nAdjHigh * corr.sequel_discount);
+  }
+  if (book.price >= corr.high_price_threshold) {
+    nAdjLow  = Math.floor(nAdjLow  * corr.high_price_bonus);
+    nAdjHigh = Math.floor(nAdjHigh * corr.high_price_bonus);
+  }
+  if (book.nthBook > 1) {
+    const nthFactor = Math.pow(corr.nth_book_decay, book.nthBook - 1);
+    nAdjLow  = Math.floor(nAdjLow  * nthFactor);
+    nAdjHigh = Math.floor(nAdjHigh * nthFactor);
+  }
+
+  // Co-Branding mentor adjustment
+  if (at === 'Co-Branding' && author.mentorSales > 0) {
+    const cbR = cfg.print_run.cobranding_mentor_ratio;
+    const cbLow  = Math.floor(author.mentorSales * cbR.min);
+    const cbHigh = Math.floor(author.mentorSales * cbR.max);
+    nAdjLow  = nAdjLow > 0 ? Math.min(nAdjLow, cbLow) : cbLow;
+    nAdjHigh = Math.max(nAdjHigh, cbHigh);
+  }
+
+  const trend = cfg.trend_multiplier[at] || 1.08;
+  const nTrendLow  = Math.floor(nAdjLow  * trend);
+  const nTrendHigh = Math.floor(nAdjHigh * trend);
+
+  const distMin = cfg.distribution.minimum_stock;
+  const totalPotentialLow  = nTrendLow  + distMin;
+  const totalPotentialHigh = nTrendHigh + distMin;
+
+  // Step 2.5: Benchmark
+  const bm = cfg.first_month_benchmarks[at] || cfg.first_month_benchmarks.Debut;
+
+  // Step 3: Paper curves
+  const decayCfg = cfg.decay_rates[at] || cfg.decay_rates.Debut;
+  const monthlyDecay = decayCfg.monthly_decay;
+  const curveLow  = buildCurve(totalPotentialLow,  monthlyDecay);
+  const curveHigh = buildCurve(totalPotentialHigh, monthlyDecay);
+
+  const crM1Low  = curveLow[0];
+  const crM1High = curveHigh[0];
+  let bmCheck = 'pass';
+  if (crM1High < bm.range[0] * 0.5) bmCheck = 'cr_too_low';
+  else if (crM1Low > bm.range[1] * 1.5) bmCheck = 'cr_too_high';
+
+  // Step 4: Ebook
+  const ebookR = cfg.ebook_channel.ebook_ratio[at] || cfg.ebook_channel.ebook_ratio.Debut;
+  const ebookDecayCfg = cfg.ebook_channel.decay_rates[at] || cfg.ebook_channel.decay_rates.Debut;
+  const ebookDecay = ebookDecayCfg.monthly_decay;
+
+  const ebookPotLow  = Math.floor(totalPotentialLow  * ebookR.min);
+  const ebookPotHigh = Math.floor(totalPotentialHigh * ebookR.max);
+  const ebookCurveLow  = buildCurve(ebookPotLow,  ebookDecay);
+  const ebookCurveHigh = buildCurve(ebookPotHigh, ebookDecay);
+
+  // Step 5: Assemble
+  const targetM = cfg.print_run.target_months;
+  const paperFyLow  = totalAtMonth(curveLow, 12);
+  const paperFyHigh = totalAtMonth(curveHigh, 12);
+  const ebookFyLow  = totalAtMonth(ebookCurveLow, 12);
+  const ebookFyHigh = totalAtMonth(ebookCurveHigh, 12);
+
+  return {
+    // Paper
+    curveLow, curveHigh,
+    printRunLow:  totalAtMonth(curveLow, targetM),
+    printRunHigh: totalAtMonth(curveHigh, targetM),
+    sales6mLow:   totalAtMonth(curveLow, 6),
+    sales6mHigh:  totalAtMonth(curveHigh, 6),
+    salesFyLow:   paperFyLow,
+    salesFyHigh:  paperFyHigh,
+    // Ebook
+    ebookCurveLow, ebookCurveHigh,
+    ebookFyLow, ebookFyHigh,
+    // Combined
+    combinedFyLow:  paperFyLow + ebookFyLow,
+    combinedFyHigh: paperFyHigh + ebookFyHigh,
+    // Benchmark
+    benchmark: {
+      crMethodLow: crM1Low, crMethodHigh: crM1High,
+      bmMedian: bm.median, bmRange: bm.range, check: bmCheck,
+    },
+    // Params
+    params: {
+      authorType: at,
+      category: book.category,
+      categoryMultiplier: catMul,
+      totalSocial,
+      generalSocial,
+      cmoneyFollowers,
+      innerAudience,
+      nCommitted: [nCommittedLow, nCommittedHigh],
+      nAdjusted: [Math.floor(nAdjLow), Math.floor(nAdjHigh)],
+      totalPotentialPaper: [totalPotentialLow, totalPotentialHigh],
+      totalPotentialEbook: [ebookPotLow, ebookPotHigh],
+      monthlyDecayPaper: monthlyDecay,
+      monthlyDecayEbook: ebookDecay,
+      ebookRatio: [ebookR.min, ebookR.max],
+      trendMultiplier: trend,
+      deflation: [corr.global_deflation.min, corr.global_deflation.max],
+      crMiddle: [cr.middle.min, cr.middle.max],
+    },
+  };
+}
+
+// ============================================================
+// UI Logic
+// ============================================================
+const fmt = n => n.toLocaleString('zh-TW');
+let curveChartInstance = null;
+let ebookChartInstance = null;
+
+function selectType(el) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function getSelectedType() {
+  const active = document.querySelector('.type-btn.active');
+  return active ? active.dataset.type : 'KOC';
+}
+
+function runPrediction() {
+  const author = {
+    name: document.getElementById('authorName').value || '未命名作者',
+    type: getSelectedType(),
+    ytSubs: parseInt(document.getElementById('ytSubs').value) || 0,
+    igFollowers: parseInt(document.getElementById('igFollowers').value) || 0,
+    fbFollowers: parseInt(document.getElementById('fbFollowers').value) || 0,
+    cmoney: parseInt(document.getElementById('cmoney').value) || 0,
+    courseStudents: parseInt(document.getElementById('courseStudents').value) || 0,
+    mentorSales: parseInt(document.getElementById('mentorSales').value) || 0,
+  };
+
+  const book = {
+    title: document.getElementById('bookTitle').value || '未命名新書',
+    category: document.getElementById('bookCategory').value || 'finance',
+    price: parseInt(document.getElementById('bookPrice').value) || 380,
+    nthBook: parseInt(document.getElementById('nthBook').value) || 1,
+    isSequel: document.getElementById('isSequel').value === '1',
+  };
+
+  const r = predict(author, book);
+
+  // Show results
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultsArea').classList.add('show');
+
+  // Header
+  const typeLabels = { KOP:'KOP 長銷型', KOC:'KOC 猛爆型', 'Co-Branding':'Co-Branding', Debut:'新人 Debut' };
+  document.getElementById('resultTitle').innerHTML =
+    `<span style="font-size:20px">${book.title}</span><br>` +
+    `<span style="font-size:13px;color:var(--gray-500)">${author.name} | ${typeLabels[author.type]} | 社群 ${fmt(author.ytSubs+author.igFollowers+author.fbFollowers+author.cmoney)} 粉絲</span>`;
+
+  // KPI cards
+  const median6m = Math.round((r.sales6mLow + r.sales6mHigh) / 2);
+  const medianFy = Math.round((r.salesFyLow + r.salesFyHigh) / 2);
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="kpi danger">
+      <div class="kpi-label">首印量建議 (3月)</div>
+      <div class="kpi-value">${fmt(r.printRunLow)}-${fmt(r.printRunHigh)}</div>
+      <div class="kpi-sub">本</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">紙本首年預測</div>
+      <div class="kpi-value">${fmt(r.salesFyLow)}-${fmt(r.salesFyHigh)}</div>
+      <div class="kpi-sub">中位 ${fmt(medianFy)} 本</div>
+    </div>
+    <div class="kpi warning">
+      <div class="kpi-label">電子書首年</div>
+      <div class="kpi-value">${fmt(r.ebookFyLow)}-${fmt(r.ebookFyHigh)}</div>
+      <div class="kpi-sub">本</div>
+    </div>
+    <div class="kpi danger">
+      <div class="kpi-label">合併首年</div>
+      <div class="kpi-value">${fmt(r.combinedFyLow)}-${fmt(r.combinedFyHigh)}</div>
+      <div class="kpi-sub">紙本+電子</div>
+    </div>
+  `;
+
+  // Paper curve chart
+  renderCurveChart(r);
+  renderEbookChart(r);
+  renderBenchmark(r, author);
+  renderRefCases(author.type, r);
+  renderParams(r, author, book);
+}
+
+function renderCurveChart(r) {
+  if (curveChartInstance) curveChartInstance.destroy();
+  const labels = Array.from({length:12}, (_,i) => `月${i+1}`);
+  const cumLow = cumulative(r.curveLow);
+  const cumHigh = cumulative(r.curveHigh);
+  curveChartInstance = new Chart(document.getElementById('curveChart'), {
+    type:'bar',
+    data: {
+      labels,
+      datasets: [
+        { type:'bar', label:'月銷量(保守)', data:r.curveLow, backgroundColor:'rgba(184,134,11,.20)', borderColor:'#b8860b', borderWidth:1, borderRadius:5, yAxisID:'y' },
+        { type:'bar', label:'月銷量(樂觀)', data:r.curveHigh, backgroundColor:'rgba(178,34,52,.18)', borderColor:'#b22234', borderWidth:1, borderRadius:5, yAxisID:'y' },
+        { type:'line', label:'累計(保守)', data:cumLow, borderColor:'#b8860b', borderDash:[5,3], pointRadius:3, tension:.3, yAxisID:'y1', pointBackgroundColor:'#b8860b' },
+        { type:'line', label:'累計(樂觀)', data:cumHigh, borderColor:'#b22234', borderDash:[5,3], pointRadius:3, tension:.3, yAxisID:'y1', pointBackgroundColor:'#b22234' },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: {
+        y:  { beginAtZero:true, position:'left',  title:{display:true,text:'月銷量(本)'} },
+        y1: { beginAtZero:true, position:'right', title:{display:true,text:'累計銷量(本)'}, grid:{drawOnChartArea:false} },
+      },
+      plugins: {
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) + ' 本' } },
+      }
+    }
+  });
+}
+
+function renderEbookChart(r) {
+  if (ebookChartInstance) ebookChartInstance.destroy();
+  const labels = Array.from({length:12}, (_,i) => `月${i+1}`);
+  ebookChartInstance = new Chart(document.getElementById('ebookChart'), {
+    type:'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'電子書(保守)', data:r.ebookCurveLow, backgroundColor:'rgba(184,134,11,.20)', borderColor:'#b8860b', borderWidth:1, borderRadius:5 },
+        { label:'電子書(樂觀)', data:r.ebookCurveHigh, backgroundColor:'rgba(178,34,52,.18)', borderColor:'#b22234', borderWidth:1, borderRadius:5 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: { y:{ beginAtZero:true, title:{display:true,text:'月銷量(本)'} } },
+      plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) + ' 本' } } },
+    }
+  });
+}
+
+function renderBenchmark(r, author) {
+  const bm = r.benchmark;
+  const midPred = Math.round((bm.crMethodLow + bm.crMethodHigh) / 2);
+  let cls, icon, msg;
+  if (bm.check === 'pass') {
+    cls='pass'; icon='&#9989;';
+    msg = `CR 法首月預測 ${fmt(bm.crMethodLow)}~${fmt(bm.crMethodHigh)} 本，落在 ${author.type} 歷史基準區間 [${fmt(bm.bmRange[0])}, ${fmt(bm.bmRange[1])}] 內，預測合理。`;
+  } else if (bm.check === 'cr_too_low') {
+    cls='warn'; icon='&#9888;&#65039;';
+    msg = `CR 法首月預測 ${fmt(bm.crMethodLow)}~${fmt(bm.crMethodHigh)} 本，<strong>低於</strong> ${author.type} 歷史基準 [${fmt(bm.bmRange[0])}, ${fmt(bm.bmRange[1])}]。可能原因：社群粉絲數偏低或粉絲購買力高於模型假設。建議參考同類型案例手動調整。`;
+  } else {
+    cls='fail'; icon='&#128308;';
+    msg = `CR 法首月預測 ${fmt(bm.crMethodLow)}~${fmt(bm.crMethodHigh)} 本，<strong>高於</strong> ${author.type} 歷史基準上限。建議以基準區間上限 ${fmt(bm.bmRange[1])} 為參考天花板。`;
+  }
+  document.getElementById('benchmarkArea').innerHTML = `
+    <div class="bm-bar ${cls}">${icon} ${msg}</div>
+    <table class="params-table" style="margin-top:10px">
+      <tr><th>CR 法首月 (保守~樂觀)</th><td>${fmt(bm.crMethodLow)} ~ ${fmt(bm.crMethodHigh)} 本</td></tr>
+      <tr><th>${author.type} 歷史中位數</th><td>${fmt(bm.bmMedian)} 本</td></tr>
+      <tr><th>${author.type} 歷史區間</th><td>${fmt(bm.bmRange[0])} ~ ${fmt(bm.bmRange[1])} 本</td></tr>
+    </table>
+  `;
+}
+
+function renderRefCases(authorType, r) {
+  const cases = REF_CASES[authorType] || [];
+  if (!cases.length) {
+    document.getElementById('refCasesArea').innerHTML = '<p style="color:var(--gray-500);font-size:13px">此類型暫無參考案例</p>';
+    return;
+  }
+  const medianFy = Math.round((r.salesFyLow + r.salesFyHigh) / 2);
+  let html = `<table class="compare-table">
+    <thead><tr><th>書名</th><th>作者</th><th>FB</th><th>同學會</th><th>首月</th><th>首年</th></tr></thead><tbody>`;
+  // Add prediction row
+  const fbInput = parseInt(document.getElementById('fbFollowers').value)||0;
+  const cmInput = parseInt(document.getElementById('cmoney').value)||0;
+  html += `<tr class="highlight">
+    <td><strong>本次預測</strong></td><td>-</td>
+    <td>${fmt(fbInput)}</td><td>${fmt(cmInput)}</td>
+    <td>${fmt(r.curveLow[0])}~${fmt(r.curveHigh[0])}</td>
+    <td>${fmt(r.salesFyLow)}~${fmt(r.salesFyHigh)}</td>
+  </tr>`;
+  for (const c of cases) {
+    html += `<tr>
+      <td>${c.name}${c.note ? ' <span style="color:var(--warning);font-size:11px">'+c.note+'</span>' : ''}</td>
+      <td>${c.author}</td>
+      <td>${fmt(c.fb)}</td><td>${c.cm ? fmt(c.cm) : '-'}</td>
+      <td>${fmt(c.m1)}</td>
+      <td>${c.fy !== null ? fmt(c.fy) : '-'}</td>
+    </tr>`;
+  }
+  html += '</tbody></table>';
+  document.getElementById('refCasesArea').innerHTML = html;
+}
+
+function renderParams(r, author, book) {
+  const p = r.params;
+  const catLabels = { finance:'投資理財', growth:'心靈勵志/個人成長', business:'商業經營' };
+  const rows = [
+    ['模型版本', 'GEM v2.0 (互動版)'],
+    ['作者類型', p.authorType],
+    ['書籍類別', (catLabels[p.category]||p.category) + ' (CR修正 ×' + p.categoryMultiplier + ')'],
+    ['一般社群粉絲 (YT/IG/FB)', fmt(p.generalSocial)],
+    ['股市爆料同學會', fmt(p.cmoneyFollowers) + (p.cmoneyFollowers > 0 ? ' (CR 15~28% ×類別修正)' : '')],
+    ['社群總計', fmt(p.totalSocial)],
+    ['內層受眾 (課程/App)', fmt(p.innerAudience)],
+    ['Middle CR (修正後)', `${(p.crMiddle[0]*p.categoryMultiplier*100).toFixed(1)}% ~ ${(p.crMiddle[1]*p.categoryMultiplier*100).toFixed(1)}%`],
+    ['N_Committed (受眾承諾)', `${fmt(p.nCommitted[0])} ~ ${fmt(p.nCommitted[1])}`],
+    ['Global Deflation', `${(p.deflation[0]*100).toFixed(0)}% ~ ${(p.deflation[1]*100).toFixed(0)}%`],
+    ['N_Adjusted (修正後)', `${fmt(p.nAdjusted[0])} ~ ${fmt(p.nAdjusted[1])}`],
+    ['趨勢乘數', `${p.trendMultiplier}x`],
+    ['紙本月衰退率', `${(p.monthlyDecayPaper*100).toFixed(0)}%`],
+    ['電子書月衰退率', `${(p.monthlyDecayEbook*100).toFixed(0)}%`],
+    ['電子/紙本比', `${(p.ebookRatio[0]*100).toFixed(0)}% ~ ${(p.ebookRatio[1]*100).toFixed(0)}%`],
+    ['紙本年度潛力', `${fmt(p.totalPotentialPaper[0])} ~ ${fmt(p.totalPotentialPaper[1])}`],
+    ['電子年度潛力', `${fmt(p.totalPotentialEbook[0])} ~ ${fmt(p.totalPotentialEbook[1])}`],
+    ['第幾本書衰減', book.nthBook > 1 ? `0.92^${book.nthBook-1} = ${Math.pow(0.92, book.nthBook-1).toFixed(3)}` : '無（首本書）'],
+    ['續作折扣', book.isSequel ? '0.70' : '無'],
+  ];
+  document.getElementById('paramsTable').innerHTML =
+    rows.map(([k,v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('');
+}
+</script>
+</body>
+</html>

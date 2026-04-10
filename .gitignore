@@ -1,0 +1,27 @@
+# Database binary
+db/*.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Config with secrets
+config/settings.yaml
+
+# Data files (too large / proprietary)
+data/raw/
+data/processed/
+data/external/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude local settings
+.claude/
