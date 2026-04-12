@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金尉出版 月報 2026年01月</title>
+    <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+        background: #faf6ed; color: #3a2e1a; line-height: 1.6;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    /* Header */
+    .report-header {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        background: linear-gradient(135deg, #3a2e1a 0%, #5c4a2a 40%, #7a6340 100%);
+        color: white; padding: 32px; border-radius: 12px; margin-bottom: 32px;
+        position: relative;
+    }
+    .report-header::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+        background: linear-gradient(90deg, #b22234, #d4a517, #b8860b, #d4a517, #b22234);
+        border-radius: 0 0 12px 12px;
+    }
+    .report-header h1 {
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #f5e6b8 0%, #d4a517 40%, #f5e6b8 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .period { font-size: 1.1rem; color: #f5e6b8; margin-top: 4px; }
+    .sub-period { font-size: 0.9rem; color: #ddd0b0; }
+    .generated { font-size: 0.85rem; color: #ddd0b0; text-align: right; }
+
+    /* Sections */
+    .section { margin-bottom: 36px; }
+    .section h2 {
+        font-size: 1.3rem; color: #3a2e1a; border-left: 4px solid #b8860b;
+        padding-left: 12px; margin-bottom: 16px;
+    }
+
+    /* Summary Cards */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .summary-card {
+        background: white; border-radius: 8px; padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .summary-card h3 { font-size: 1rem; margin-bottom: 10px; }
+    .summary-card ul { padding-left: 20px; }
+    .summary-card li { margin-bottom: 6px; font-size: 0.95rem; }
+    .highlights { border-top: 3px solid #2e7d32; }
+    .highlights h3 { color: #2e7d32; }
+    .actions { border-top: 3px solid #b8860b; }
+    .actions h3 { color: #b8860b; }
+    .concerns { border-top: 3px solid #b22234; }
+    .concerns h3 { color: #b22234; }
+
+    /* KPI Cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .kpi-card {
+        background: white; border-radius: 8px; padding: 20px; text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .kpi-title { font-size: 0.85rem; color: #9e8e6e; margin-bottom: 8px; text-transform: uppercase; }
+    .kpi-value { font-size: 1.6rem; font-weight: 700; color: #3a2e1a; }
+    .kpi-unit { font-size: 0.9rem; font-weight: 400; color: #9e8e6e; }
+    .kpi-growth { font-size: 0.9rem; margin-top: 6px; font-weight: 600; }
+    .kpi-growth.positive { color: #2e7d32; }
+    .kpi-growth.negative { color: #b22234; }
+    .kpi-growth.neutral { color: #9e8e6e; }
+    .growth-label { font-weight: 400; color: #9e8e6e; font-size: 0.8rem; }
+
+    /* Tables */
+    .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .data-table thead { background: #f0e8d4; }
+    .data-table th { padding: 12px 16px; text-align: left; font-size: 0.85rem; color: #5c4a2a; font-weight: 600; }
+    .data-table td { padding: 10px 16px; border-top: 1px solid #f0e8d4; font-size: 0.9rem; }
+    .data-table tr:hover { background: #faf6ed; }
+    .num { text-align: right !important; font-variant-numeric: tabular-nums; }
+    .book-title { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .compact td, .compact th { padding: 8px 12px; }
+
+    /* Badges */
+    .badge {
+        display: inline-block; padding: 2px 8px; border-radius: 4px;
+        font-size: 0.75rem; font-weight: 600;
+    }
+    .badge.paper { background: #f5e6b8; color: #996515; }
+    .badge.ebook { background: #f8e0e4; color: #8b1a2b; }
+
+    /* Charts */
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .chart-container { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .chart-container.wide { width: 100%; }
+    .channel-table-container { }
+
+    /* Type Split */
+    .type-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .type-card {
+        background: white; border-radius: 8px; padding: 24px; text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .type-card h3 { color: #5c4a2a; margin-bottom: 8px; }
+    .type-value { font-size: 1.8rem; font-weight: 700; color: #3a2e1a; }
+    .type-value .unit { font-size: 1rem; font-weight: 400; }
+    .type-revenue { font-size: 1rem; color: #9e8e6e; margin-top: 4px; }
+    .type-ratio { font-size: 0.85rem; color: #b8860b; margin-top: 8px; }
+
+    /* Alerts */
+    .alert-box {
+        border-radius: 8px; padding: 16px 20px; margin-bottom: 12px;
+    }
+    .alert-box h4 { margin-bottom: 4px; }
+    .alert-box.danger { background: #fef2f2; border-left: 4px solid #b22234; }
+    .alert-box.danger h4 { color: #b22234; }
+    .alert-box.warning { background: #fffbeb; border-left: 4px solid #f59e0b; }
+    .alert-box.warning h4 { color: #d97706; }
+    .alert-box.info { background: #faf6ed; border-left: 4px solid #b8860b; }
+    .alert-box.info h4 { color: #b8860b; }
+    .alert-detail { font-size: 0.85rem; color: #9e8e6e; margin-top: 4px; }
+
+    /* Footer */
+    footer {
+        text-align: center; padding: 24px 0; margin-top: 32px;
+        border-top: 1px solid #f0e8d4; color: #9e8e6e; font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .chart-row { grid-template-columns: 1fr; }
+        .type-split-grid { grid-template-columns: 1fr; }
+        .report-header { flex-direction: column; }
+    }
+
+    @media print {
+        body { background: white; }
+        .container { max-width: 100%; padding: 0; }
+        .section { page-break-inside: avoid; }
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+<div class="container">
+
+    <header class="report-header">
+        <div class="header-left">
+            <h1>金尉出版 營運月報</h1>
+            <p class="period">2026年01月 | 2026/01/01 ~ 2026/01/31</p>
+        </div>
+        <div class="header-right">
+            <p class="generated">報表產生時間: 2026-04-13 00:51</p>
+        </div>
+    </header>
+
+    <!-- Executive Summary -->
+    <section class="section">
+        <h2>經營摘要</h2>
+        <div class="summary-grid">
+            <div class="summary-card highlights">
+                <h3>本月亮點</h3>
+                <ul><li>營收較前期大幅成長 52.7%，達 $3,306,566</li><li>本期冠軍《《主角模式：從「我得這樣」到「我可以選擇」，影響7500萬人的成長祕密》｜樊登》（樊登）售出 2,589 冊，營收 $607,778</li><li>電子書佔比 16.5%，持續成長</li></ul>
+            </div>
+            <div class="summary-card actions">
+                <h3>行動建議</h3>
+                <ul><li>持續推動暢銷書《《主角模式：從「我得這樣」到「》的行銷力道</li><li>維持現有策略，關注下期新書上市表現</li></ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPI Cards + YoY -->
+    <section class="section">
+        <h2>關鍵指標</h2>
+        <div class="kpi-grid">
+            
+            <div class="kpi-card">
+                <div class="kpi-title">銷售冊數</div>
+                <div class="kpi-value">12,104 <span class="kpi-unit">冊</span></div>
+                
+            <div class="kpi-growth positive">
+                +48.3% <span class="growth-label">MoM</span>
+            </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">營收</div>
+                <div class="kpi-value">NT$3,306,566 <span class="kpi-unit"></span></div>
+                
+            <div class="kpi-growth positive">
+                +52.7% <span class="growth-label">MoM</span>
+            </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">訂單數</div>
+                <div class="kpi-value">114 <span class="kpi-unit">筆</span></div>
+                
+            <div class="kpi-growth positive">
+                +15.2% <span class="growth-label">MoM</span>
+            </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">平均客單價</div>
+                <div class="kpi-value">NT$29,005 <span class="kpi-unit"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="kpi-grid" style="margin-top: 16px;">
+            
+            <div class="kpi-card">
+                <div class="kpi-title">銷量 YoY</div>
+                <div class="kpi-value">+45.8% <span class="kpi-unit"></span></div>
+                
+            <div class="kpi-growth positive">
+                +45.8% <span class="growth-label">vs 去年同期</span>
+            </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">營收 YoY</div>
+                <div class="kpi-value">+11.2% <span class="kpi-unit"></span></div>
+                
+            <div class="kpi-growth positive">
+                +11.2% <span class="growth-label">vs 去年同期</span>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Books -->
+    <section class="section">
+        <h2>暢銷書 TOP 20</h2>
+        <table class="data-table">
+            <thead><tr>
+                <th>#</th><th>書名</th><th>作者</th><th>類別</th>
+                <th class="num">銷量</th><th class="num">營收</th>
+            </tr></thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="book-title">《主角模式：從「我得這樣」到「我可以選擇」，影響7500萬人的成長祕密》｜樊登</td>
+                    <td>樊登</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">2,589</td>
+                    <td class="num">NT$607,778</td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td class="book-title">《價值覺醒：股人阿勳的進化思維，破解「便宜不漲」的真相，告別賣飛人生》｜股人阿勳</td>
+                    <td>股人阿勳</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">1,738</td>
+                    <td class="num">NT$434,236</td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td class="book-title">《活用技術分析寶典：飆股上校朱家泓40年實戰精華 從K線、均線到交易高手的養成秘笈》【平裝書】｜朱家泓</td>
+                    <td>朱家泓</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">1,315</td>
+                    <td class="num">NT$888,780</td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td class="book-title">《慢慢富，比快快窮容易：阮慕驊教你3階段打造一生財富，找回失控的投資節奏》｜阮慕驊</td>
+                    <td>阮慕驊</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">633</td>
+                    <td class="num">NT$165,514</td>
+                </tr>
+
+                <tr>
+                    <td>5</td>
+                    <td class="book-title">《Ryan爸爸的高效存股法: ETF X3大類股 打造月領10萬股息方程式》｜Ryan爸爸</td>
+                    <td>Ryan爸爸</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">582</td>
+                    <td class="num">NT$132,704</td>
+                </tr>
+
+                <tr>
+                    <td>6</td>
+                    <td class="book-title">《主角模式：從「我得這樣」到「我可以選擇」，影響7500萬人的成長祕密》電子書｜樊登</td>
+                    <td>樊登</td>
+                    <td><span class="badge ebook">電子書</span></td>
+                    <td class="num">579</td>
+                    <td class="num">NT$87,939</td>
+                </tr>
+
+                <tr>
+                    <td>7</td>
+                    <td class="book-title">《富媽媽窮媽媽：陳重銘寫給不想一輩子窮忙的你，10個觀念從領薪水到領千萬股利》｜陳重銘</td>
+                    <td>陳重銘</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">578</td>
+                    <td class="num">NT$137,887</td>
+                </tr>
+
+                <tr>
+                    <td>8</td>
+                    <td class="book-title">《致富習慣：改變10個生活小細節帶來巨大財富》電子版｜史蒂夫•艾德卡克</td>
+                    <td>史蒂夫•艾德卡克</td>
+                    <td><span class="badge ebook">電子書</span></td>
+                    <td class="num">384</td>
+                    <td class="num">NT$26,759</td>
+                </tr>
+
+                <tr>
+                    <td>9</td>
+                    <td class="book-title">《權證小哥短線終極戰法：4大策略 ✖ 6種工具 ✖ 68個實戰案例，手把手教你賺》｜權證小哥</td>
+                    <td>權證小哥</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">377</td>
+                    <td class="num">NT$104,293</td>
+                </tr>
+
+                <tr>
+                    <td>10</td>
+                    <td class="book-title">《飆股新手的實戰筆記：簡單4步驟，小資也能季賺30%》｜陳威良</td>
+                    <td>陳威良</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">239</td>
+                    <td class="num">NT$57,726</td>
+                </tr>
+
+                <tr>
+                    <td>11</td>
+                    <td class="book-title">【暢銷珍藏版】《極簡投資: 股市小白也能1天搞懂的技術分析》｜林恩如</td>
+                    <td>林恩如</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">217</td>
+                    <td class="num">NT$54,064</td>
+                </tr>
+
+                <tr>
+                    <td>12</td>
+                    <td class="book-title">《存股族的槓桿翻倍術：自組ETF × 低風險策略，普通上班族也能年賺20%》｜吳宜勲（老吳）</td>
+                    <td>吳宜勲（老吳）</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">203</td>
+                    <td class="num">NT$46,000</td>
+                </tr>
+
+                <tr>
+                    <td>13</td>
+                    <td class="book-title">《學會走圖SOP讓技術分析養我一輩子》｜林穎</td>
+                    <td>林穎</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">161</td>
+                    <td class="num">NT$42,661</td>
+                </tr>
+
+                <tr>
+                    <td>14</td>
+                    <td class="book-title">《慢慢富，比快快窮容易：阮慕驊教你3階段打造一生財富，找回失控的投資節奏》電子書｜阮慕驊</td>
+                    <td>阮慕驊</td>
+                    <td><span class="badge ebook">電子書</span></td>
+                    <td class="num">137</td>
+                    <td class="num">NT$23,433</td>
+                </tr>
+
+                <tr>
+                    <td>15</td>
+                    <td class="book-title">做對五個實戰步驟你就是賺錢高手(金尉)</td>
+                    <td>朱家泓</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">125</td>
+                    <td class="num">NT$22,288</td>
+                </tr>
+
+                <tr>
+                    <td>16</td>
+                    <td class="book-title">小小巴菲特贏在起跑點</td>
+                    <td>陳重銘</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">123</td>
+                    <td class="num">NT$29,186</td>
+                </tr>
+
+                <tr>
+                    <td>17</td>
+                    <td class="book-title">《極簡投資：股市小白也能1天搞懂的技術分析》｜林恩如</td>
+                    <td>林恩如</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">114</td>
+                    <td class="num">NT$20,070</td>
+                </tr>
+
+                <tr>
+                    <td>18</td>
+                    <td class="book-title">勝率近100%的可轉債存股術</td>
+                    <td>蕭啟斌</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">111</td>
+                    <td class="num">NT$23,587</td>
+                </tr>
+
+                <tr>
+                    <td>19</td>
+                    <td class="book-title">《給理財小白的翻身筆記：2年從負債75萬到資產300萬，ETF讓我走在財務自由路上》電子版｜鐵蛋</td>
+                    <td>鐵蛋</td>
+                    <td><span class="badge ebook">電子書</span></td>
+                    <td class="num">100</td>
+                    <td class="num">NT$14,055</td>
+                </tr>
+
+                <tr>
+                    <td>20</td>
+                    <td class="book-title">「教官，財報有問題！」：看穿市場鬼故事，買到銅板好股</td>
+                    <td>楊禮軒</td>
+                    <td><span class="badge paper">紙本書</span></td>
+                    <td class="num">85</td>
+                    <td class="num">NT$20,139</td>
+                </tr></tbody>
+        </table>
+    </section>
+
+    <!-- Author Ranking -->
+    <section class="section">
+        <h2>作者銷量排名 TOP 15</h2>
+        <table class="data-table">
+            <thead><tr>
+                <th>#</th><th>作者</th><th class="num">銷量</th>
+                <th class="num">營收</th><th class="num">書籍數</th><th>暢銷書</th>
+            </tr></thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>樊登</td>
+                    <td class="num">3,168</td>
+                    <td class="num">NT$695,717</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《主角模式：從「我得這樣」到「我可以選擇」，影響7</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>股人阿勳</td>
+                    <td class="num">1,783</td>
+                    <td class="num">NT$441,861</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《價值覺醒：股人阿勳的進化思維，破解「便宜不漲」的</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>朱家泓</td>
+                    <td class="num">1,628</td>
+                    <td class="num">NT$957,097</td>
+                    <td class="num">9</td>
+                    <td class="book-title">《活用技術分析寶典：飆股上校朱家泓40年實戰精華 </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>陳重銘</td>
+                    <td class="num">1,041</td>
+                    <td class="num">NT$239,649</td>
+                    <td class="num">19</td>
+                    <td class="book-title">《富媽媽窮媽媽：陳重銘寫給不想一輩子窮忙的你，10</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>阮慕驊</td>
+                    <td class="num">770</td>
+                    <td class="num">NT$188,947</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《慢慢富，比快快窮容易：阮慕驊教你3階段打造一生財</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Ryan爸爸</td>
+                    <td class="num">645</td>
+                    <td class="num">NT$143,883</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《Ryan爸爸的高效存股法: ETF X3大類股 </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>權證小哥</td>
+                    <td class="num">417</td>
+                    <td class="num">NT$111,260</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《權證小哥短線終極戰法：4大策略 ✖ 6種工具 ✖</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>史蒂夫•艾德卡克</td>
+                    <td class="num">404</td>
+                    <td class="num">NT$32,413</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《致富習慣：改變10個生活小細節帶來巨大財富》電子</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>林恩如</td>
+                    <td class="num">342</td>
+                    <td class="num">NT$75,859</td>
+                    <td class="num">3</td>
+                    <td class="book-title">【暢銷珍藏版】《極簡投資: 股市小白也能1天搞懂的</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>陳威良</td>
+                    <td class="num">273</td>
+                    <td class="num">NT$63,004</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《飆股新手的實戰筆記：簡單4步驟，小資也能季賺30</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>吳宜勲（老吳）</td>
+                    <td class="num">249</td>
+                    <td class="num">NT$52,731</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《存股族的槓桿翻倍術：自組ETF × 低風險策略，</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>林穎</td>
+                    <td class="num">187</td>
+                    <td class="num">NT$47,006</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《學會走圖SOP讓技術分析養我一輩子》｜林穎</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>蕭啟斌</td>
+                    <td class="num">131</td>
+                    <td class="num">NT$26,654</td>
+                    <td class="num">1</td>
+                    <td class="book-title">勝率近100%的可轉債存股術</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>阿汝娜、周劍銓</td>
+                    <td class="num">129</td>
+                    <td class="num">NT$23,418</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《上癮式存錢：邊賺邊存、越存越爽，一鍵刷新你對錢的</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>Mike</td>
+                    <td class="num">110</td>
+                    <td class="num">NT$26,083</td>
+                    <td class="num">2</td>
+                    <td class="book-title">《破局致富：從認知覺醒到財務自由，看懂資本遊戲規則</td>
+                </tr></tbody>
+        </table>
+    </section>
+
+    <!-- Channel Mix -->
+    <section class="section">
+        <h2>通路分佈</h2>
+        <div class="chart-row">
+            <div class="chart-container"><canvas id="channelPieChart"></canvas></div>
+            <div class="channel-table-container">
+                <table class="data-table compact">
+                    <thead><tr><th>通路</th><th class="num">銷量</th><th class="num">佔比</th><th class="num">營收</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>聯合發行</td>
+                            <td class="num">5,430</td>
+                            <td class="num">44.9%</td>
+                            <td class="num">NT$1,668,186</td>
+                        </tr>
+
+                        <tr>
+                            <td>博客來(圖書)</td>
+                            <td class="num">3,085</td>
+                            <td class="num">25.5%</td>
+                            <td class="num">NT$878,177</td>
+                        </tr>
+
+                        <tr>
+                            <td>博客來</td>
+                            <td class="num">1,239</td>
+                            <td class="num">10.2%</td>
+                            <td class="num">NT$163,292</td>
+                        </tr>
+
+                        <tr>
+                            <td>理財寶</td>
+                            <td class="num">841</td>
+                            <td class="num">6.9%</td>
+                            <td class="num">NT$272,903</td>
+                        </tr>
+
+                        <tr>
+                            <td>Kobo</td>
+                            <td class="num">453</td>
+                            <td class="num">3.7%</td>
+                            <td class="num">NT$69,647</td>
+                        </tr>
+
+                        <tr>
+                            <td>讀者訂購</td>
+                            <td class="num">316</td>
+                            <td class="num">2.6%</td>
+                            <td class="num">NT$78,340</td>
+                        </tr>
+
+                        <tr>
+                            <td>全國期刊</td>
+                            <td class="num">277</td>
+                            <td class="num">2.3%</td>
+                            <td class="num">NT$70,502</td>
+                        </tr>
+
+                        <tr>
+                            <td>讀墨</td>
+                            <td class="num">214</td>
+                            <td class="num">1.8%</td>
+                            <td class="num">NT$42,628</td>
+                        </tr>
+
+                        <tr>
+                            <td>楨彥圖書</td>
+                            <td class="num">101</td>
+                            <td class="num">0.8%</td>
+                            <td class="num">NT$26,675</td>
+                        </tr>
+
+                        <tr>
+                            <td>Pubu</td>
+                            <td class="num">79</td>
+                            <td class="num">0.7%</td>
+                            <td class="num">NT$18,556</td>
+                        </tr>
+
+                        <tr>
+                            <td>作者購書</td>
+                            <td class="num">20</td>
+                            <td class="num">0.2%</td>
+                            <td class="num">NT$5,040</td>
+                        </tr>
+
+                        <tr>
+                            <td>大和書報</td>
+                            <td class="num">19</td>
+                            <td class="num">0.2%</td>
+                            <td class="num">NT$4,585</td>
+                        </tr>
+
+                        <tr>
+                            <td>Hami書城</td>
+                            <td class="num">17</td>
+                            <td class="num">0.1%</td>
+                            <td class="num">NT$3,802</td>
+                        </tr>
+
+                        <tr>
+                            <td>前台訂單匯入</td>
+                            <td class="num">13</td>
+                            <td class="num">0.1%</td>
+                            <td class="num">NT$4,233</td>
+                        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Paper vs Ebook -->
+    <section class="section">
+        <h2>紙本書 vs 電子書</h2>
+        <div class="type-split-grid">
+            <div class="type-card">
+                <h3>紙本書</h3>
+                <div class="type-value">10,102 <span class="unit">冊</span></div>
+                <div class="type-revenue">NT$3,008,641</div>
+            </div>
+            <div class="type-card">
+                <h3>電子書</h3>
+                <div class="type-value">2,002 <span class="unit">冊</span></div>
+                <div class="type-revenue">NT$297,925</div>
+                <div class="type-ratio">佔銷量 16.5% | 佔營收 9.0%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New vs Backlist -->
+    
+    <section class="section" id="new-vs-backlist">
+        <h2>新書 vs 長銷書</h2>
+        <div class="type-split-grid">
+            <div class="type-card">
+                <h3>新書（6 個月內）</h3>
+                <div class="type-value">12,104 <span class="unit">冊</span></div>
+                <div class="type-ratio">100.0% | 109 個品項</div>
+            </div>
+            <div class="type-card">
+                <h3>長銷書</h3>
+                <div class="type-value">0 <span class="unit">冊</span></div>
+                <div class="type-ratio">0.0% | 0 個品項</div>
+            </div>
+        </div>
+        <div style="margin-top: 16px; background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h4>新書銷量 TOP 5</h4>
+            <ol><li>《主角模式：從「我得這樣」到「我可以選擇（樊登）: 2,589 冊</li><li>《價值覺醒：股人阿勳的進化思維，破解「便（股人阿勳）: 1,738 冊</li><li>《活用技術分析寶典：飆股上校朱家泓40年（朱家泓）: 1,315 冊</li><li>《慢慢富，比快快窮容易：阮慕驊教你3階段（阮慕驊）: 633 冊</li><li>《Ryan爸爸的高效存股法: ETF X（Ryan爸爸）: 582 冊</li></ol>
+        </div>
+    </section>
+
+    <!-- Alerts -->
+    
+    <section class="section" id="alerts">
+        <h2>異常警示</h2>
+        
+            <div class="alert-box warning">
+                <h4>單書銷量大幅下滑</h4>
+                <p>《《人生重啟：移民美國跨越財富高牆，從普通》銷量下滑 100%</p>
+                <p class="alert-detail">前期 195 冊 → 本期 0 冊</p>
+            </div>
+            <div class="alert-box warning">
+                <h4>單書銷量大幅下滑</h4>
+                <p>《《做自己的心理治療師：超過25 種療癒技》銷量下滑 83%</p>
+                <p class="alert-detail">前期 42 冊 → 本期 7 冊</p>
+            </div>
+            <div class="alert-box warning">
+                <h4>單書銷量大幅下滑</h4>
+                <p>《《卓越 : 學霸養成指南,吳軍博士教你成》銷量下滑 95%</p>
+                <p class="alert-detail">前期 40 冊 → 本期 2 冊</p>
+            </div>
+            <div class="alert-box warning">
+                <h4>單書銷量大幅下滑</h4>
+                <p>《《境界 : 站在巨人肩膀上,吳軍博士帶你》銷量下滑 97%</p>
+                <p class="alert-detail">前期 36 冊 → 本期 1 冊</p>
+            </div>
+            <div class="alert-box warning">
+                <h4>單書銷量大幅下滑</h4>
+                <p>《《工程師勳仔40歲前退休計畫──指數節稅》銷量下滑 51%</p>
+                <p class="alert-detail">前期 76 冊 → 本期 37 冊</p>
+            </div>
+            <div class="alert-box info">
+                <h4>單日銷量異常高峰</h4>
+                <p>2026-01-06 銷量 3,012 冊，為平均的 7.7 倍</p>
+                <p class="alert-detail">建議確認是否有促銷活動或系統異常</p>
+            </div>
+    </section>
+
+    <!-- Daily Trend -->
+    <section class="section">
+        <h2>每日銷售趨勢</h2>
+        <div class="chart-container wide"><canvas id="dailyTrendChart"></canvas></div>
+    </section>
+
+    <footer><p>金尉出版社 營運分析系統 | 自動產生於 2026-04-13 00:51</p></footer>
+</div>
+<script>
+    // 通路圓餅圖
+    new Chart(document.getElementById('channelPieChart'), {
+        type: 'pie',
+        data: {
+            labels: ["聯合發行", "博客來(圖書)", "博客來", "理財寶", "Kobo", "讀者訂購", "全國期刊", "讀墨"],
+            datasets: [{
+                data: [5430, 3085, 1239, 841, 453, 316, 277, 214],
+                backgroundColor: ['#b8860b', '#b22234', '#3a2e1a', '#d4a517', '#2e7d32', '#996515', '#8b1a2b', '#5c4a2a'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'right' },
+                title: { display: true, text: '銷售通路佔比（銷量）' }
+            }
+        }
+    });
+
+    // 每日趨勢圖
+    new Chart(document.getElementById('dailyTrendChart'), {
+        type: 'line',
+        data: {
+            labels: ["2026-01-01", "2026-01-02", "2026-01-03", "2026-01-04", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-10", "2026-01-11", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-17", "2026-01-18", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-24", "2026-01-25", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-01-31"],
+            datasets: [
+                {
+                    label: '銷量（冊）',
+                    data: [2015, 1534, 5, 7, 28, 3012, 84, 122, 756, 47, 9, 323, 10, 132, 733, 535, 12, 34, 384, 155, 22, 100, 342, 3, 9, 14, 1377, 27, 243, 14, 16],
+                    borderColor: '#b8860b',
+                    backgroundColor: 'rgba(184, 134, 11, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    yAxisID: 'y',
+                },
+                {
+                    label: '營收（NT$）',
+                    data: [303976, 500974, 2295, 3065, 7219, 729404, 14594, 31123, 343611, 16280, 3167, 76684, 3922, 31128, 170369, 138580, 4657, 8946, 94899, 51704, 7620, 45068, 83007, 947, 4882, 4379, 540651, 9532, 63334, 5327, 5222],
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    fill: false,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: { type: 'linear', position: 'left', title: { display: true, text: '銷量' } },
+                y1: { type: 'linear', position: 'right', title: { display: true, text: '營收' }, grid: { drawOnChartArea: false } }
+            }
+        }
+    });
+    </script>
+</body>
+</html>

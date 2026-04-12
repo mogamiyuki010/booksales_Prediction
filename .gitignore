@@ -14,6 +14,7 @@ config/settings.yaml
 data/raw/
 data/processed/
 data/external/
+營收表-Rawdata*.csv
 
 # IDE
 .vscode/

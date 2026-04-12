@@ -1,0 +1,78 @@
+{
+  "document_title": "智能圖書印量預估模型 (GEM) 訓練文件：2024-2025 案例積累",
+  "model_core_logic": "三層疊代預測法 (Three-Layer Iterative Forecasting)",
+  "author_types": [
+    {
+      "type": "頂級 KOP/長銷王",
+      "examples": ["陳重銘", "朱家泓"],
+      "velocity": "穩定、持久、衰退慢"
+    },
+    {
+      "type": "社群 KOC/速爆型",
+      "examples": ["莎拉王", "陳威良"],
+      "velocity": "初期爆發力強，長尾衰退快"
+    },
+    {
+      "type": "Co-Branding/系統繼承",
+      "examples": ["艾蜜莉 2.0", "林穎"],
+      "velocity": "穩健長銷，銷量集中度高"
+    }
+  ],
+  "case_studies": [
+    {
+      "author": "陳重銘",
+      "type": "KOP/長銷王",
+      "prediction_fy": "29,250 - 35,100 本",
+      "actual_sales": "14,000 本 (3.7 個月)",
+      "key_learning": "CR (4.1%) 準確，證明 KOP 潛力大，但須採用嚴苛衰退模型。"
+    },
+    {
+      "author": "艾蜜莉 2.0",
+      "type": "Co-Branding/續作",
+      "prediction_fy": "25,000 - 30,000 本",
+      "actual_sales": "13,740 本 (8 個月)",
+      "key_learning": "續作長尾極短，內層 CR 極高（87% 銷量在初期），須採用最高衰退率。"
+    },
+    {
+      "author": "陳威良",
+      "type": "KOC/速爆型",
+      "prediction_fy": "8,450 - 10,400 本",
+      "actual_sales": "4,500 本 (6 個月)",
+      "key_learning": "影片作者轉換速度慢（月均 750 本），但總潛力 N_C 正確。"
+    },
+    {
+      "author": "朱家泓",
+      "type": "KOP/長銷王",
+      "prediction_fy": "25,000 - 30,000 套",
+      "actual_sales": "13,237 套 (7 個月)",
+      "key_learning": "知識系統書衰退極慢，高單價 (NT$820) 可突破銷量天花板。"
+    },
+    {
+      "author": "莎拉王",
+      "type": "KOC/速爆型",
+      "prediction_fy": "10,000 - 12,000 本",
+      "actual_sales": "10,568 本 (4.5 個月)",
+      "key_learning": "KOC 銷量高度集中（81% 集中在第 1 週期），衰退率設定為最快。"
+    },
+    {
+      "author": "林穎",
+      "type": "Co-Branding/繼承",
+      "prediction_fy": "22,000 - 25,000 本",
+      "actual_sales": "18,551 本 (29 個月)",
+      "key_learning": "Co-Branding Multiplier 驗證成功，首印量 N 與最終總銷量極為接近。"
+    }
+  ],
+  "calibrated_parameters": {
+    "conversion_rate_cr": [
+      {"audience": "內層受眾 (鐵粉/付費學員)", "cr_range": "80% - 100%"},
+      {"audience": "中層受眾 (活躍粉絲)", "cr_range": "3% - 8%"},
+      {"audience": "極端低點 (模型安全下限)", "cr_range": "4.1%"}
+    ],
+    "decay_rate": [
+      {"type": "頂級 KOP/知識系統書", "rate_principle": "月均銷量衰退控制在 20% 左右。"},
+      {"type": "社群 KOC/熱點速爆型", "rate_principle": "月銷量迅速跌落至基線的 40% 以下。"},
+      {"type": "Co-Branding/續作", "rate_principle": "衰退率取 30%-40%，長尾穩定性優於 KOC。"}
+    ],
+    "print_run_n_logic": "Co-Branding N 的安全線可設定為導師歷史銷量的 60% 至 70%。"
+  }
+}

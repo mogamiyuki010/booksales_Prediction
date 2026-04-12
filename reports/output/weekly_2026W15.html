@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>金尉出版 週報 2026-W15</title>
+    <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+        background: #f8fafc; color: #1e293b; line-height: 1.6;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    /* Header */
+    .report-header {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        border-bottom: 3px solid #2563eb; padding-bottom: 16px; margin-bottom: 32px;
+    }
+    .report-header h1 { font-size: 1.8rem; color: #1e40af; }
+    .period { font-size: 1.1rem; color: #475569; margin-top: 4px; }
+    .sub-period { font-size: 0.9rem; color: #94a3b8; }
+    .generated { font-size: 0.85rem; color: #94a3b8; text-align: right; }
+
+    /* Sections */
+    .section { margin-bottom: 36px; }
+    .section h2 {
+        font-size: 1.3rem; color: #1e40af; border-left: 4px solid #2563eb;
+        padding-left: 12px; margin-bottom: 16px;
+    }
+
+    /* Summary Cards */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .summary-card {
+        background: white; border-radius: 8px; padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .summary-card h3 { font-size: 1rem; margin-bottom: 10px; }
+    .summary-card ul { padding-left: 20px; }
+    .summary-card li { margin-bottom: 6px; font-size: 0.95rem; }
+    .highlights { border-top: 3px solid #16a34a; }
+    .highlights h3 { color: #16a34a; }
+    .actions { border-top: 3px solid #2563eb; }
+    .actions h3 { color: #2563eb; }
+    .concerns { border-top: 3px solid #ea580c; }
+    .concerns h3 { color: #ea580c; }
+
+    /* KPI Cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .kpi-card {
+        background: white; border-radius: 8px; padding: 20px; text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .kpi-title { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
+    .kpi-value { font-size: 1.6rem; font-weight: 700; color: #1e293b; }
+    .kpi-unit { font-size: 0.9rem; font-weight: 400; color: #64748b; }
+    .kpi-growth { font-size: 0.9rem; margin-top: 6px; font-weight: 600; }
+    .kpi-growth.positive { color: #16a34a; }
+    .kpi-growth.negative { color: #dc2626; }
+    .kpi-growth.neutral { color: #64748b; }
+    .growth-label { font-weight: 400; color: #94a3b8; font-size: 0.8rem; }
+
+    /* Tables */
+    .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .data-table thead { background: #f1f5f9; }
+    .data-table th { padding: 12px 16px; text-align: left; font-size: 0.85rem; color: #475569; font-weight: 600; }
+    .data-table td { padding: 10px 16px; border-top: 1px solid #e2e8f0; font-size: 0.9rem; }
+    .data-table tr:hover { background: #f8fafc; }
+    .num { text-align: right !important; font-variant-numeric: tabular-nums; }
+    .book-title { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .compact td, .compact th { padding: 8px 12px; }
+
+    /* Badges */
+    .badge {
+        display: inline-block; padding: 2px 8px; border-radius: 4px;
+        font-size: 0.75rem; font-weight: 600;
+    }
+    .badge.paper { background: #dbeafe; color: #1e40af; }
+    .badge.ebook { background: #fce7f3; color: #9d174d; }
+
+    /* Charts */
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .chart-container { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .chart-container.wide { width: 100%; }
+    .channel-table-container { }
+
+    /* Type Split */
+    .type-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .type-card {
+        background: white; border-radius: 8px; padding: 24px; text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .type-card h3 { color: #475569; margin-bottom: 8px; }
+    .type-value { font-size: 1.8rem; font-weight: 700; color: #1e293b; }
+    .type-value .unit { font-size: 1rem; font-weight: 400; }
+    .type-revenue { font-size: 1rem; color: #64748b; margin-top: 4px; }
+    .type-ratio { font-size: 0.85rem; color: #2563eb; margin-top: 8px; }
+
+    /* Alerts */
+    .alert-box {
+        border-radius: 8px; padding: 16px 20px; margin-bottom: 12px;
+    }
+    .alert-box h4 { margin-bottom: 4px; }
+    .alert-box.danger { background: #fef2f2; border-left: 4px solid #dc2626; }
+    .alert-box.danger h4 { color: #dc2626; }
+    .alert-box.warning { background: #fffbeb; border-left: 4px solid #f59e0b; }
+    .alert-box.warning h4 { color: #d97706; }
+    .alert-box.info { background: #eff6ff; border-left: 4px solid #2563eb; }
+    .alert-box.info h4 { color: #2563eb; }
+    .alert-detail { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
+
+    /* Footer */
+    footer {
+        text-align: center; padding: 24px 0; margin-top: 32px;
+        border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .chart-row { grid-template-columns: 1fr; }
+        .type-split-grid { grid-template-columns: 1fr; }
+        .report-header { flex-direction: column; }
+    }
+
+    @media print {
+        body { background: white; }
+        .container { max-width: 100%; padding: 0; }
+        .section { page-break-inside: avoid; }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="report-header">
+            <h1>金尉出版 營運週報</h1>
+            <p class="period">2026-W15 | 2026/04/06 ~ 2026/04/12</p>
+        </header>
+        <div class="alert-box warning">
+            <h3>本週無銷售資料</h3>
+            <p>指定期間內無銷售紀錄，請確認資料是否已匯入。</p>
+        </div>
+    </div>
+</body>
+</html>

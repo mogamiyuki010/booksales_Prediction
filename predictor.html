@@ -363,24 +363,21 @@ header .sub { font-size:13px; color:var(--warm-500); letter-spacing:.5px; }
 
 <script>
 // ============================================================
-// GEM v2.0 Config (from config_v2.yaml)
+// GEM v2.0 Config — Dynamic loader with hardcoded fallback
 // ============================================================
-const CONFIG = {
+
+// Hardcoded defaults (used when JSON fetch fails)
+const DEFAULT_CONFIG = {
   conversion_rates: {
     inner: { min:0.80, max:1.00 },
-    // 基準 CR (投資理財類)，其他類別乘以 category_multiplier
-    // 校準依據: 莎拉王(6.5萬FB→首月6107), 肥羊(8萬FB→首月4502), 鬼手易生(純CMoney→首月2056)
     middle: { min:0.025, max:0.060 },
     outer: { min:0.003, max:0.008 },
-    // 股市爆料同學會: 財經垂直社群，高互動高轉換
     cmoney: { min:0.15, max:0.28 },
   },
-  // 書籍類別對 CR 的影響
-  // 投資理財粉絲購買力最強，心靈勵志/個人成長次之
   category_multiplier: {
-    finance:  1.00,  // 投資理財: 基準 (三案例校準)
-    growth:   0.60,  // 心靈勵志: 受眾較廣但購買衝動較低
-    business: 0.75,  // 商業經營: 介於兩者之間
+    finance:  1.00,
+    growth:   0.60,
+    business: 0.75,
   },
   decay_rates: {
     KOP:          { monthly_decay:0.18 },
@@ -389,7 +386,6 @@ const CONFIG = {
     Debut:        { monthly_decay:0.30 },
   },
   correction_factors: {
-    // 財經類 deflation 上調: 受眾購買意願強於一般書籍
     global_deflation: { min:0.70, max:0.85 },
     sequel_discount: 0.70,
     high_price_threshold: 600,
@@ -421,8 +417,7 @@ const CONFIG = {
   },
 };
 
-// Reference cases for comparison (real data)
-const REF_CASES = {
+const DEFAULT_REF_CASES = {
   KOP: [
     { name:'存100張金融股', author:'陳重銘', m1:9907, fy:16260, fb:580000 },
     { name:'活用技術分析寶典', author:'朱家泓', m1:3951, fy:13150, fb:30000 },
@@ -444,6 +439,110 @@ const REF_CASES = {
     { name:'人生流當品', author:'秦嗣林', m1:3207, fy:7552, fb:0 },
   ],
 };
+
+// These will be populated by the async loader (or fall back to defaults)
+let CONFIG = DEFAULT_CONFIG;
+let REF_CASES = DEFAULT_REF_CASES;
+
+// ============================================================
+// Async data loader
+// ============================================================
+(async function loadData() {
+  // --- Load CONFIG from config_v2.json ---
+  try {
+    const cfgResp = await fetch('data/config_v2.json', { signal: AbortSignal.timeout(2000) });
+    if (cfgResp.ok) {
+      const json = await cfgResp.json();
+      // Build CONFIG from the JSON structure (mirrors config_v2.yaml)
+      const cr = json.conversion_rates || {};
+      const ext = json.predictor_extensions || {};
+      CONFIG = {
+        conversion_rates: {
+          inner:  cr.inner  || DEFAULT_CONFIG.conversion_rates.inner,
+          middle: cr.middle || DEFAULT_CONFIG.conversion_rates.middle,
+          outer:  cr.outer  || DEFAULT_CONFIG.conversion_rates.outer,
+          // cmoney comes from predictor_extensions
+          cmoney: (ext.cmoney_conversion_rate) || DEFAULT_CONFIG.conversion_rates.cmoney,
+        },
+        // category_multiplier comes from predictor_extensions
+        category_multiplier: ext.category_multiplier || DEFAULT_CONFIG.category_multiplier,
+        decay_rates:          json.decay_rates          || DEFAULT_CONFIG.decay_rates,
+        correction_factors:   json.correction_factors   || DEFAULT_CONFIG.correction_factors,
+        trend_multiplier:     json.trend_multiplier     || DEFAULT_CONFIG.trend_multiplier,
+        distribution:         json.distribution         || DEFAULT_CONFIG.distribution,
+        print_run:            json.print_run            || DEFAULT_CONFIG.print_run,
+        ebook_channel:        json.ebook_channel        || DEFAULT_CONFIG.ebook_channel,
+        first_month_benchmarks: json.first_month_benchmarks || DEFAULT_CONFIG.first_month_benchmarks,
+      };
+      console.log('[predictor] CONFIG loaded from data/config_v2.json');
+    } else {
+      console.warn('[predictor] config_v2.json fetch failed (' + cfgResp.status + '), using defaults');
+    }
+  } catch (e) {
+    console.warn('[predictor] config_v2.json not available, using defaults:', e.message);
+  }
+
+  // --- Load REF_CASES from author_models.json ---
+  try {
+    const amResp = await fetch('data/author_models.json', { signal: AbortSignal.timeout(2000) });
+    if (amResp.ok) {
+      const amJson = await amResp.json();
+      const built = buildRefCasesFromAuthors(amJson);
+      // Only replace if we actually found cases
+      if (Object.values(built).some(arr => arr.length > 0)) {
+        REF_CASES = built;
+        console.log('[predictor] REF_CASES loaded from data/author_models.json');
+      } else {
+        console.warn('[predictor] No valid ref cases found in author_models.json, using defaults');
+      }
+    } else {
+      console.warn('[predictor] author_models.json fetch failed (' + amResp.status + '), using defaults');
+    }
+  } catch (e) {
+    console.warn('[predictor] author_models.json not available, using defaults:', e.message);
+  }
+})();
+
+/**
+ * Build REF_CASES from author_models.json.
+ * Filters for books that have a prediction with actual_fy_sales data.
+ */
+function buildRefCasesFromAuthors(amJson) {
+  const cases = { KOP: [], KOC: [], 'Co-Branding': [], Debut: [] };
+  const authors = amJson.authors || [];
+
+  for (const author of authors) {
+    const books = author.books || [];
+    for (const book of books) {
+      const pred = book.prediction;
+      if (!pred) continue;
+      // Need at least actual_fy_sales to be a useful reference case
+      if (pred.actual_fy_sales == null && pred.actual_6m_sales == null) continue;
+
+      const authorType = book.author_type_at_publish || author.author_type || 'Debut';
+      if (!cases[authorType]) cases[authorType] = [];
+
+      const refCase = {
+        name: book.title,
+        author: author.name,
+        m1: pred.actual_first_month_sales || null,
+        fy: pred.actual_fy_sales,
+        fb: author.fb_followers || 0,
+      };
+      // Add CMoney if available
+      if (author.app_subscribers) refCase.cm = author.app_subscribers;
+      // Add mentor info for Co-Branding
+      if (authorType === 'Co-Branding' && author.mentor_name) {
+        refCase.mentor = author.mentor_name;
+      }
+      // Add note if first month data comes from actual
+      if (pred.actual_first_month_sales) refCase.note = '首月實際';
+
+      cases[authorType].push(refCase);
+    }
+  }
+  return cases;
+}
 
 // ============================================================
 // Prediction Engine (port of predictor_v2.py)

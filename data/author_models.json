@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-12T20:48:36",
+  "generated_at": "2026-04-13T00:22:56",
   "db_path": "db/booksales.db",
   "authors": [
     {
@@ -19,6 +19,8 @@
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -553,7 +555,7 @@
       "primary_platform": "Facebook",
       "yt_subscribers": 0,
       "ig_followers": 0,
-      "fb_followers": 0,
+      "fb_followers": 330000,
       "course_students": 0,
       "app_subscribers": 10000,
       "previous_book_count": 2,
@@ -562,12 +564,14 @@
       "notes": "續作型，艾蜜莉 2.0 為自身品牌續作，非 Co-Branding 繼承",
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
-      "updated_at": "2026-04-12 12:45:51",
+      "updated_at": "2026-04-12 14:17:24",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
           "book_id": 2,
-          "title": "艾蜜莉存股術 2.0",
+          "title": "艾蜜莉存股術2.0：月薪2.5萬起步 滾到5千萬財富",
           "author_id": 2,
           "category": "商業財經",
           "subcategory": "ETF存股",
@@ -582,8 +586,8 @@
           "nth_book": 1,
           "notes": "自身品牌續作(非Co-Branding)，內層CR極高(87%銷量在初期)",
           "created_at": "2026-04-09 17:39:43",
-          "updated_at": "2026-04-12 07:42:18",
-          "product_id": null,
+          "updated_at": "2026-04-12 13:52:47",
+          "product_id": "B0000105",
           "prediction": {
             "prediction_id": 2,
             "book_id": 2,
@@ -603,27 +607,6 @@
             "notes": "實際銷量 13,740 本 (8個月)。續作長尾極短，內層CR極高(87%銷量在初期)，須採用最高衰退率",
             "created_at": "2026-04-09 17:39:43"
           }
-        },
-        {
-          "book_id": 160,
-          "title": "艾蜜莉存股術2.0：月薪2.5萬起步 滾到5千萬財富",
-          "author_id": 2,
-          "category": "商業財經",
-          "subcategory": "ETF存股",
-          "price_ntd": null,
-          "page_count": null,
-          "format": "single",
-          "publish_date": "2024-10-01",
-          "first_print_run": null,
-          "author_type_at_publish": "KOC",
-          "is_sequel": 0,
-          "predecessor_book_id": null,
-          "nth_book": 2,
-          "notes": "營收表 1548 筆紀錄；含電子書版；相關商品ID: B0000105, EB0000105",
-          "created_at": "2026-04-12 12:45:51",
-          "updated_at": "2026-04-12 12:45:51",
-          "product_id": "B0000105",
-          "prediction": null
         }
       ],
       "metrics_history": [
@@ -638,7 +621,9 @@
           "google_trends_index": null,
           "engagement_rate": 2.0,
           "notes": null,
-          "created_at": "2026-04-12 07:41:56"
+          "created_at": "2026-04-12 07:41:56",
+          "fb_group_followers": 0,
+          "cmoney_followers": 0
         }
       ]
     },
@@ -659,11 +644,13 @@
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
           "book_id": 3,
-          "title": "陳威良投資書",
+          "title": "飆股新手的實戰筆記：簡單4步驟，小資也能季賺30%",
           "author_id": 3,
           "category": "商業財經",
           "subcategory": "技術分析",
@@ -678,8 +665,8 @@
           "nth_book": 1,
           "notes": "影片作者轉換速度慢，月均750本",
           "created_at": "2026-04-09 17:39:43",
-          "updated_at": "2026-04-09 17:39:43",
-          "product_id": null,
+          "updated_at": "2026-04-12 13:52:47",
+          "product_id": "B0000127",
           "prediction": {
             "prediction_id": 3,
             "book_id": 3,
@@ -699,27 +686,6 @@
             "notes": "實際銷量 4,500 本 (6個月)。影片作者轉換速度慢(月均750本)，但總潛力N_C正確",
             "created_at": "2026-04-09 17:39:43"
           }
-        },
-        {
-          "book_id": 182,
-          "title": "飆股新手的實戰筆記：簡單4步驟，小資也能季賺30%",
-          "author_id": 3,
-          "category": "商業財經",
-          "subcategory": "技術分析",
-          "price_ntd": null,
-          "page_count": null,
-          "format": "single",
-          "publish_date": "2025-10-01",
-          "first_print_run": null,
-          "author_type_at_publish": "KOC",
-          "is_sequel": 0,
-          "predecessor_book_id": null,
-          "nth_book": 2,
-          "notes": "營收表 337 筆紀錄；含電子書版；相關商品ID: B0000127, EB0000127",
-          "created_at": "2026-04-12 12:45:51",
-          "updated_at": "2026-04-12 12:45:51",
-          "product_id": "B0000127",
-          "prediction": null
         }
       ],
       "metrics_history": []
@@ -740,7 +706,9 @@
       "notes": "頂級KOP/長銷王，知識系統書，高單價策略",
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
-      "updated_at": "2026-04-12 12:45:51",
+      "updated_at": "2026-04-12 14:17:35",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -912,29 +880,8 @@
           "prediction": null
         },
         {
-          "book_id": 134,
-          "title": "活用技術分析寶典：飆股上校朱家泓40年實戰精華 從K線、均線到交易高手的養成秘笈",
-          "author_id": 4,
-          "category": "商業財經",
-          "subcategory": "技術分析",
-          "price_ntd": null,
-          "page_count": null,
-          "format": "single",
-          "publish_date": "2024-10-01",
-          "first_print_run": null,
-          "author_type_at_publish": "KOP",
-          "is_sequel": 0,
-          "predecessor_book_id": null,
-          "nth_book": 9,
-          "notes": "營收表 2679 筆紀錄；含電子書版；相關商品ID: B0000118, B0000116, EB0000116",
-          "created_at": "2026-04-12 12:45:51",
-          "updated_at": "2026-04-12 12:45:51",
-          "product_id": "B0000118",
-          "prediction": null
-        },
-        {
           "book_id": 4,
-          "title": "朱家泓技術分析寶典(上下冊)",
+          "title": "活用技術分析寶典：飆股上校朱家泓40年實戰精華 從K線、均線到交易高手的養成秘笈",
           "author_id": 4,
           "category": "商業財經",
           "subcategory": "技術分析K線實戰",
@@ -949,8 +896,8 @@
           "nth_book": 10,
           "notes": "高單價套書(NT$820)，知識系統書衰退極慢",
           "created_at": "2026-04-09 17:39:43",
-          "updated_at": "2026-04-12 07:22:24",
-          "product_id": null,
+          "updated_at": "2026-04-12 13:52:47",
+          "product_id": "B0000118",
           "prediction": {
             "prediction_id": 4,
             "book_id": 4,
@@ -991,11 +938,13 @@
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
           "book_id": 5,
-          "title": "莎拉王理財書",
+          "title": "新式型態學: 175張圖 x 22種多空K棒組合 x 8種獨創型態 股市新手一出手就賺",
           "author_id": 5,
           "category": "商業財經",
           "subcategory": "新手財務自由",
@@ -1010,8 +959,8 @@
           "nth_book": 1,
           "notes": "KOC銷量高度集中(81%在第1週期)",
           "created_at": "2026-04-09 17:39:43",
-          "updated_at": "2026-04-09 17:39:43",
-          "product_id": null,
+          "updated_at": "2026-04-12 13:52:47",
+          "product_id": "B0000110",
           "prediction": {
             "prediction_id": 5,
             "book_id": 5,
@@ -1031,27 +980,6 @@
             "notes": "實際銷量 10,568 本 (4.5個月)。KOC銷量高度集中(81%在第1週期)，預估精準",
             "created_at": "2026-04-09 17:39:43"
           }
-        },
-        {
-          "book_id": 161,
-          "title": "新式型態學: 175張圖 x 22種多空K棒組合 x 8種獨創型態 股市新手一出手就賺",
-          "author_id": 5,
-          "category": "商業財經",
-          "subcategory": "技術分析",
-          "price_ntd": null,
-          "page_count": null,
-          "format": "single",
-          "publish_date": "2024-10-01",
-          "first_print_run": null,
-          "author_type_at_publish": "KOC",
-          "is_sequel": 0,
-          "predecessor_book_id": null,
-          "nth_book": 2,
-          "notes": "營收表 650 筆紀錄；含電子書版；相關商品ID: B0000110, EB0000110, B0000113",
-          "created_at": "2026-04-12 12:45:51",
-          "updated_at": "2026-04-12 12:45:51",
-          "product_id": "B0000110",
-          "prediction": null
         }
       ],
       "metrics_history": []
@@ -1073,11 +1001,13 @@
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-09 17:39:43",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": "朱家泓",
       "books": [
         {
           "book_id": 6,
-          "title": "林穎投資傳承書",
+          "title": "學會走圖SOP讓技術分析養我一輩子",
           "author_id": 6,
           "category": "商業財經",
           "subcategory": "ETF存股",
@@ -1092,8 +1022,8 @@
           "nth_book": 1,
           "notes": "Co-Branding Multiplier驗證成功",
           "created_at": "2026-04-09 17:39:43",
-          "updated_at": "2026-04-09 17:39:43",
-          "product_id": null,
+          "updated_at": "2026-04-12 13:52:47",
+          "product_id": "B0000080",
           "prediction": {
             "prediction_id": 6,
             "book_id": 6,
@@ -1113,27 +1043,6 @@
             "notes": "實際銷量 18,551 本 (29個月)。Co-Branding Multiplier驗證成功，首印量N與最終總銷量極為接近",
             "created_at": "2026-04-09 17:39:43"
           }
-        },
-        {
-          "book_id": 142,
-          "title": "學會走圖SOP讓技術分析養我一輩子",
-          "author_id": 6,
-          "category": "商業財經",
-          "subcategory": "技術分析",
-          "price_ntd": null,
-          "page_count": null,
-          "format": "single",
-          "publish_date": "2023-10-01",
-          "first_print_run": null,
-          "author_type_at_publish": "Co-Branding",
-          "is_sequel": 0,
-          "predecessor_book_id": null,
-          "nth_book": 2,
-          "notes": "營收表 1361 筆紀錄；含電子書版；相關商品ID: B0000080, EB0000080",
-          "created_at": "2026-04-12 12:45:51",
-          "updated_at": "2026-04-12 12:45:51",
-          "product_id": "B0000080",
-          "prediction": null
         }
       ],
       "metrics_history": []
@@ -1155,6 +1064,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1198,6 +1109,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1241,6 +1154,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1284,6 +1199,8 @@
       "snapshot_date": "2023-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1327,6 +1244,8 @@
       "snapshot_date": "2021-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1391,6 +1310,8 @@
       "snapshot_date": "2023-11-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1434,6 +1355,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1477,6 +1400,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1520,6 +1445,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1563,6 +1490,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1627,6 +1556,8 @@
       "snapshot_date": "2026-02-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1670,6 +1601,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1713,6 +1646,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1756,6 +1691,8 @@
       "snapshot_date": "2020-12-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1799,6 +1736,8 @@
       "snapshot_date": "2013-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1884,6 +1823,8 @@
       "snapshot_date": "2026-02-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1927,6 +1868,8 @@
       "snapshot_date": "2023-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -1970,6 +1913,8 @@
       "snapshot_date": "2023-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2013,6 +1958,8 @@
       "snapshot_date": "2013-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2056,6 +2003,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2099,6 +2048,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2142,6 +2093,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2185,6 +2138,8 @@
       "snapshot_date": "2017-04-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2228,6 +2183,8 @@
       "snapshot_date": "2013-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2271,6 +2228,8 @@
       "snapshot_date": "2016-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2314,6 +2273,8 @@
       "snapshot_date": "2013-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2357,6 +2318,8 @@
       "snapshot_date": "2023-12-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2421,6 +2384,8 @@
       "snapshot_date": "2019-05-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2464,6 +2429,8 @@
       "snapshot_date": "2021-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2507,6 +2474,8 @@
       "snapshot_date": "2022-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2571,6 +2540,8 @@
       "snapshot_date": "2020-11-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2614,6 +2585,8 @@
       "snapshot_date": "2026-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2678,6 +2651,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2721,6 +2696,8 @@
       "snapshot_date": "2013-11-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2764,6 +2741,8 @@
       "snapshot_date": "2008-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2807,6 +2786,8 @@
       "snapshot_date": "2019-12-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2850,6 +2831,8 @@
       "snapshot_date": "2023-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2893,6 +2876,8 @@
       "snapshot_date": "2023-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2936,6 +2921,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -2979,6 +2966,8 @@
       "snapshot_date": "2026-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3043,6 +3032,8 @@
       "snapshot_date": "2014-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3086,6 +3077,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3129,6 +3122,8 @@
       "snapshot_date": "2024-12-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3172,6 +3167,8 @@
       "snapshot_date": "2022-11-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3215,6 +3212,8 @@
       "snapshot_date": "2016-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3279,6 +3278,8 @@
       "snapshot_date": "2021-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3322,6 +3323,8 @@
       "snapshot_date": "2016-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3470,6 +3473,8 @@
       "snapshot_date": "2024-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3513,6 +3518,8 @@
       "snapshot_date": "2022-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3577,6 +3584,8 @@
       "snapshot_date": "2019-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3620,6 +3629,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3663,6 +3674,8 @@
       "snapshot_date": "2016-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3706,6 +3719,8 @@
       "snapshot_date": "2025-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3770,6 +3785,8 @@
       "snapshot_date": "2025-11-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3813,6 +3830,8 @@
       "snapshot_date": "2025-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3856,6 +3875,8 @@
       "snapshot_date": "2014-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -3899,6 +3920,8 @@
       "snapshot_date": "2012-01-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -4005,6 +4028,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -4048,6 +4073,8 @@
       "snapshot_date": "2025-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -4091,6 +4118,8 @@
       "snapshot_date": "2024-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {
@@ -4134,6 +4163,8 @@
       "snapshot_date": "2023-10-01",
       "created_at": "2026-04-12 12:45:51",
       "updated_at": "2026-04-12 12:45:51",
+      "fb_group_followers": 0,
+      "cmoney_followers": 0,
       "mentor_name": null,
       "books": [
         {

@@ -624,7 +624,8 @@
 </div>
 
 <script>
-// ===== Dashboard Data =====
+(async function() {
+// ===== Model Validation Data (hardcoded — not from raw data) =====
 const BACKTEST = [
   { name:'存100張金融股', author:'陳重銘', type:'KOP', actual:16260, v1mid:17622, v1err:8.4, v2mid:15284, v2err:-6.0, v2hit:true },
   { name:'富媽媽窮媽媽', author:'陳重銘', type:'KOP', actual:11871, v1mid:15905, v1err:34.0, v2mid:14465, v2err:21.9, v2hit:true },
@@ -638,9 +639,29 @@ const BACKTEST = [
   { name:'人生流當品', author:'秦嗣林', type:'Debut', actual:7552, v1mid:2348, v1err:-68.9, v2mid:1878, v2err:-75.1, v2hit:false },
 ];
 
-const TREND_DATA = {"labels":["2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03"]};
+// ===== Fetch dashboard data from JSON (with 2s timeout for GitHub Pages) =====
+let DATA = null;
+let dataSource = 'inline-fallback';
+try {
+  const resp = await fetch('data/dashboard_data.json', { signal: AbortSignal.timeout(2000) });
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  DATA = await resp.json();
+  dataSource = 'dashboard_data.json';
+} catch (err) {
+  console.warn('[Dashboard] Failed to load data/dashboard_data.json:', err.message, '— using inline fallback');
+  DATA = null;
+}
 
-const CURVE_DATA = {
+// ===== Map fetched JSON keys to chart variables (with inline fallbacks) =====
+const TREND_LABELS = DATA?.trend_labels || ["2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04"];
+const PAPER_MONTHLY = DATA?.paper_monthly || [20556,10604,8450,6513,5242,7364,5350,2670,3404,12777,6431,9831,4620,4719,7943,3787,6161,6032,8358,18044,5049,5205,2511,7183,3035,4799,14667,8770,10037,6883,13664,11085,7034,6815,6137,4493,6260,2290,7245,5918,3544,4085,3150,6335,7328,7117,3505,5618,9443,9736,13332,15];
+const EBOOK_MONTHLY = DATA?.ebook_monthly || [400,576,373,513,233,399,366,1046,1190,810,841,804,671,765,786,626,677,844,837,810,1224,395,409,846,487,1023,1200,1207,954,1071,858,930,938,636,1136,946,767,727,1623,846,688,1211,1572,2350,2310,1350,856,1514,2002,2319,0,0];
+
+const TOP_NAMES = DATA?.top_paper_names || ["小小巴菲特贏在起跑點","抓住飆股輕鬆賺2020修訂版","抓住K線獲利無限(金尉)","小資致富術:用主題式ETF錢滾錢","抓住線圖股民變股神(金尉)","做對五個實戰步驟你就是賺錢高手(金尉)","《學會走圖SOP讓技術分析養我一輩子》","6年存到300張股票 2022修訂版","《你也可以存100張金融股》","《活用技術分析寶典》","勝率近100%的可轉債存股術","《艾蜜莉存股術2.0》","《富媽媽窮媽媽》","《變身少年巴菲特》","《新式型態學》"];
+const TOP_VALS = DATA?.top_paper_vals || [42895,37001,32191,27579,21402,20519,19395,18836,16609,15557,15513,13783,12233,10826,10727];
+const TOP_AUTHORS = DATA?.top_paper_authors || ["陳重銘","朱家泓","朱家泓","陳重銘","朱家泓","朱家泓","林穎","陳重銘","陳重銘","朱家泓","蕭啟斌","艾蜜莉","陳重銘","陳重銘","莎拉(Sara Wang)"];
+
+const CURVE_DATA = DATA?.key_curves || {
   "存100張金融股 (陳重銘)": [9907,2318,672,404,381,419,397,470,364,137,436,355],
   "活用技術分析寶典 (朱家泓)": [3951,2858,2336,326,334,403,392,404,310,456,404,976],
   "艾蜜莉存股術2.0 (艾蜜莉)": [6371,4434,739,681,494,313,777,341,169,111,183,38],
@@ -649,12 +670,12 @@ const CURVE_DATA = {
   "短線終極戰法 (權證小哥)": [4683,2138,342,168,339,79,297,317,222,84,377,211],
 };
 
-const CHANNEL = {
+const CHANNEL = DATA ? { labels: DATA.channel_labels, data: DATA.channel_vals } : {
   labels: ["聯合發行","博客來(圖書)","理財寶","全國期刊","楨彥圖書","官網訂閱(微眾)","商品團訂","大和書報"],
   data: [234844,187216,21571,20762,12818,10557,7212,6311],
 };
 
-const EBOOK_RATIO = [
+const EBOOK_RATIO = DATA?.ebook_ratio || [
   {author:"陳重銘",paper:170532,ebook:9488,ratio:5.6},
   {author:"朱家泓",paper:129645,ebook:5927,ratio:4.6},
   {author:"林穎",paper:19504,ebook:2067,ratio:10.6},
@@ -671,6 +692,53 @@ const EBOOK_RATIO = [
   {author:"陳泰源",paper:4441,ebook:1679,ratio:37.8},
 ];
 
+const YEARLY_TOP5 = DATA?.yearly_top5 || {
+  2022: [
+    {name:'6年存到300張股票 2022修訂版', author:'陳重銘', sales:16531},
+    {name:'小資致富術:用主題式ETF錢滾錢', author:'陳重銘', sales:15003},
+    {name:'小小巴菲特贏在起跑點', author:'陳重銘', sales:10141},
+    {name:'「教官，財報有問題！」', author:'楊禮軒', sales:9798},
+    {name:'抓住飆股輕鬆賺2020修訂版', author:'朱家泓', sales:5300},
+  ],
+  2023: [
+    {name:'《你也可以存100張金融股》', author:'陳重銘', sales:13466},
+    {name:'《學會走圖SOP讓技術分析養我一輩子》', author:'林穎', sales:11235},
+    {name:'《人生流當品》', author:'秦嗣林', sales:6724},
+    {name:'抓住飆股輕鬆賺2020修訂版', author:'朱家泓', sales:4433},
+    {name:'抓住K線獲利無限(金尉)', author:'朱家泓', sales:3906},
+  ],
+  2024: [
+    {name:'《艾蜜莉存股術2.0》', author:'艾蜜莉', sales:13627},
+    {name:'《新式型態學》', author:'莎拉(Sara Wang)', sales:9153},
+    {name:'《活用技術分析寶典》', author:'朱家泓', sales:6803},
+    {name:'《打造小小巴菲特2》', author:'陳重銘', sales:6570},
+    {name:'《當沖畢勝啟示路》', author:'順流小畢', sales:5633},
+  ],
+  2025: [
+    {name:'《富媽媽窮媽媽》', author:'陳重銘', sales:10687},
+    {name:'《權證小哥短線終極戰法》', author:'權證小哥', sales:7940},
+    {name:'《活用技術分析寶典》', author:'朱家泓', sales:6854},
+    {name:'《飆股新手的實戰筆記》', author:'陳威良', sales:4608},
+    {name:'《Ryan爸爸的高效存股法》', author:'Ryan爸爸', sales:2486},
+  ],
+  2026: [
+    {name:'《主角模式》', author:'樊登', sales:7984},
+    {name:'《億元肥羊零成本買股術》', author:'翁建原(肥羊)', sales:4502},
+    {name:'《價值覺醒》', author:'股人阿勳', sales:2395},
+    {name:'《慢慢富，比快快窮容易》', author:'阮慕驊', sales:2151},
+    {name:'《活用技術分析寶典》', author:'朱家泓', sales:1900},
+  ],
+};
+
+// ===== Data source indicator =====
+const indicator = document.createElement('div');
+indicator.style.cssText = 'position:fixed;bottom:8px;right:12px;font-size:11px;padding:4px 10px;border-radius:6px;z-index:9999;opacity:.75;' +
+  (dataSource === 'dashboard_data.json'
+    ? 'background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;'
+    : 'background:#fdf3d7;color:#b8860b;border:1px solid #f5e6b8;');
+indicator.textContent = 'Data: ' + dataSource;
+document.body.appendChild(indicator);
+
 // ===== Render Charts =====
 Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif';
 Chart.defaults.font.size = 12;
@@ -678,14 +746,7 @@ Chart.defaults.font.size = 12;
 // Helper for number formatting
 const fmt = n => n.toLocaleString('zh-TW');
 
-// 1. Trend chart - inline data (avoid CORS issue with file://)
-const TREND_LABELS = ["2022-01","2022-02","2022-03","2022-04","2022-05","2022-06","2022-07","2022-08","2022-09","2022-10","2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04"];
-const PAPER_MONTHLY = [20556,10604,8450,6513,5242,7364,5350,2670,3404,12777,6431,9831,4620,4719,7943,3787,6161,6032,8358,18044,5049,5205,2511,7183,3035,4799,14667,8770,10037,6883,13664,11085,7034,6815,6137,4493,6260,2290,7245,5918,3544,4085,3150,6335,7328,7117,3505,5618,9443,9736,13332,15];
-const EBOOK_MONTHLY = [400,576,373,513,233,399,366,1046,1190,810,841,804,671,765,786,626,677,844,837,810,1224,395,409,846,487,1023,1200,1207,954,1071,858,930,938,636,1136,946,767,727,1623,846,688,1211,1572,2350,2310,1350,856,1514,2002,2319,0,0];
-const TOP_NAMES = ["小小巴菲特贏在起跑點","抓住飆股輕鬆賺2020修訂版","抓住K線獲利無限(金尉)","小資致富術:用主題式ETF錢滾錢","抓住線圖股民變股神(金尉)","做對五個實戰步驟你就是賺錢高手(金尉)","《學會走圖SOP讓技術分析養我一輩子》","6年存到300張股票 2022修訂版","《你也可以存100張金融股》","《活用技術分析寶典》","勝率近100%的可轉債存股術","《艾蜜莉存股術2.0》","《富媽媽窮媽媽》","《變身少年巴菲特》","《新式型態學》"];
-const TOP_VALS = [42895,37001,32191,27579,21402,20519,19395,18836,16609,15557,15513,13783,12233,10826,10727];
-const TOP_AUTHORS = ["陳重銘","朱家泓","朱家泓","陳重銘","朱家泓","朱家泓","林穎","陳重銘","陳重銘","朱家泓","蕭啟斌","艾蜜莉","陳重銘","陳重銘","莎拉(Sara Wang)"];
-
+// 1. Trend chart
 new Chart(document.getElementById('trendChart'), {
   type: 'line',
   data: {
@@ -828,46 +889,8 @@ BACKTEST.forEach(d => {
   [ae2].forEach(v => { if(v<=10) v2bins[0]++; else if(v<=20) v2bins[1]++; else if(v<=30) v2bins[2]++; else if(v<=50) v2bins[3]++; else v2bins[4]++; });
 });
 
-// Yearly TOP5 data & tab logic
-const YEARLY_TOP5 = {
-  2022: [
-    {name:'6年存到300張股票 2022修訂版', author:'陳重銘', sales:16531},
-    {name:'小資致富術:用主題式ETF錢滾錢', author:'陳重銘', sales:15003},
-    {name:'小小巴菲特贏在起跑點', author:'陳重銘', sales:10141},
-    {name:'「教官，財報有問題！」', author:'楊禮軒', sales:9798},
-    {name:'抓住飆股輕鬆賺2020修訂版', author:'朱家泓', sales:5300},
-  ],
-  2023: [
-    {name:'《你也可以存100張金融股》', author:'陳重銘', sales:13466},
-    {name:'《學會走圖SOP讓技術分析養我一輩子》', author:'林穎', sales:11235},
-    {name:'《人生流當品》', author:'秦嗣林', sales:6724},
-    {name:'抓住飆股輕鬆賺2020修訂版', author:'朱家泓', sales:4433},
-    {name:'抓住K線獲利無限(金尉)', author:'朱家泓', sales:3906},
-  ],
-  2024: [
-    {name:'《艾蜜莉存股術2.0》', author:'艾蜜莉', sales:13627},
-    {name:'《新式型態學》', author:'莎拉(Sara Wang)', sales:9153},
-    {name:'《活用技術分析寶典》', author:'朱家泓', sales:6803},
-    {name:'《打造小小巴菲特2》', author:'陳重銘', sales:6570},
-    {name:'《當沖畢勝啟示路》', author:'順流小畢', sales:5633},
-  ],
-  2025: [
-    {name:'《富媽媽窮媽媽》', author:'陳重銘', sales:10687},
-    {name:'《權證小哥短線終極戰法》', author:'權證小哥', sales:7940},
-    {name:'《活用技術分析寶典》', author:'朱家泓', sales:6854},
-    {name:'《飆股新手的實戰筆記》', author:'陳威良', sales:4608},
-    {name:'《Ryan爸爸的高效存股法》', author:'Ryan爸爸', sales:2486},
-  ],
-  2026: [
-    {name:'《主角模式》', author:'樊登', sales:7984},
-    {name:'《億元肥羊零成本買股術》', author:'翁建原(肥羊)', sales:4502},
-    {name:'《價值覺醒》', author:'股人阿勳', sales:2395},
-    {name:'《慢慢富，比快快窮容易》', author:'阮慕驊', sales:2151},
-    {name:'《活用技術分析寶典》', author:'朱家泓', sales:1900},
-  ],
-};
-
-function showYear(year) {
+// Yearly TOP5 tab logic
+window.showYear = function(year) {
   document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   const top5Body = document.getElementById('top5Body');
@@ -878,7 +901,7 @@ function showYear(year) {
       <td class="num">${fmt(d.sales)}</td>
     </tr>`;
   });
-}
+};
 showYear(2022); // default
 
 new Chart(document.getElementById('errorDistChart'), {
@@ -895,6 +918,7 @@ new Chart(document.getElementById('errorDistChart'), {
     scales:{ y:{ beginAtZero:true, ticks:{stepSize:1}, title:{display:true,text:'案例數'} } }
   }
 });
+})();
 </script>
 
 </body>

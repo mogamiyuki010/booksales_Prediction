@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作者資訊編輯 - 金尉出版社</title>
+<style>
+  :root {
+    --gold: #b8860b; --gold-dark: #996515; --gold-light: #f5e6b8; --gold-glow: #d4a517;
+    --cream: #faf6ed; --cream-dark: #f0e8d4;
+    --red: #b22234; --red-dark: #8b1a2b; --red-light: #f8e0e4; --red-soft: #d94452;
+    --success: #2e7d32; --success-light: #e8f5e9;
+    --warm-50: #fffdf7; --warm-100: #faf6ed; --warm-200: #f0e8d4; --warm-300: #ddd0b0;
+    --warm-500: #9e8e6e; --warm-700: #5c4a2a; --warm-900: #3a2e1a;
+    --shadow: 0 2px 8px rgba(58,46,26,.08), 0 1px 3px rgba(58,46,26,.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    background: linear-gradient(160deg, #faf6ed 0%, #f5f0e3 40%, #f0e8d4 100%);
+    color: var(--warm-900); line-height: 1.6; min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #3a2e1a 0%, #5c4a2a 40%, #7a6340 100%);
+    color: white; padding: 28px 36px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold-glow), var(--gold), var(--gold-glow), var(--red));
+  }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+  .header h1 {
+    font-size: 26px; font-weight: 800; letter-spacing: 1px;
+    background: linear-gradient(135deg, #f5e6b8 0%, #d4a517 40%, #f5e6b8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .header .subtitle { font-size: 13px; opacity: .85; color: var(--cream); margin-top: 4px; }
+  .back-link {
+    color: var(--cream); text-decoration: none; font-size: 13px; opacity: .75;
+    padding: 6px 14px; border: 1px solid rgba(245,230,184,.3); border-radius: 6px; transition: all .2s;
+  }
+  .back-link:hover { opacity: 1; border-color: var(--gold-glow); background: rgba(212,165,23,.12); }
+
+  /* Layout */
+  .layout { display: flex; max-width: 1440px; margin: 0 auto; min-height: calc(100vh - 100px); }
+  .sidebar {
+    width: 280px; min-width: 280px; background: white; border-right: 1px solid var(--cream-dark);
+    padding: 16px 0; overflow-y: auto; max-height: calc(100vh - 100px); position: sticky; top: 0;
+  }
+  .main { flex: 1; padding: 24px 32px 60px; overflow-y: auto; }
+
+  /* Sidebar */
+  .sidebar-title { font-size: 12px; font-weight: 700; color: var(--warm-500); padding: 8px 20px; text-transform: uppercase; letter-spacing: .5px; }
+  .author-item {
+    padding: 12px 20px; cursor: pointer; border-left: 3px solid transparent; transition: all .15s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .author-item:hover { background: var(--warm-50); }
+  .author-item.active { background: var(--gold-light); border-left-color: var(--gold); }
+  .author-item-name { font-size: 14px; font-weight: 700; }
+  .author-item-type { font-size: 11px; color: var(--warm-500); }
+  .author-item-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+  }
+  .badge-missing { background: var(--red-light); color: var(--red-dark); }
+  .badge-ok { background: var(--success-light); color: var(--success); }
+  .add-author-btn {
+    display: block; width: calc(100% - 32px); margin: 12px 16px; padding: 10px;
+    background: white; border: 1.5px dashed var(--gold); border-radius: 8px;
+    color: var(--gold-dark); font-weight: 700; font-size: 13px; cursor: pointer;
+    text-align: center; transition: all .2s; font-family: inherit;
+  }
+  .add-author-btn:hover { background: var(--gold-light); border-style: solid; }
+
+  /* Form */
+  .form-section {
+    background: white; border-radius: 12px; padding: 22px 26px; margin-bottom: 20px;
+    box-shadow: var(--shadow); border: 1px solid rgba(184,134,11,.08);
+  }
+  .form-section-title {
+    font-size: 15px; font-weight: 800; color: var(--warm-700); margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1.5px solid var(--cream-dark);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .form-grid.wide { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .form-group { display: flex; flex-direction: column; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label {
+    font-size: 11px; font-weight: 700; color: var(--warm-500); margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: .3px;
+  }
+  .form-label .required { color: var(--red); }
+  input, select, textarea {
+    padding: 9px 12px; border: 1.5px solid var(--warm-300); border-radius: 8px;
+    font-size: 14px; font-family: inherit; color: var(--warm-900); background: white;
+    transition: border-color .2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); }
+  input.missing-field, select.missing-field { border-color: var(--red); background: var(--red-light); }
+  textarea { resize: vertical; min-height: 60px; }
+  .field-hint { font-size: 11px; color: var(--warm-500); margin-top: 2px; }
+  .field-hint.warn { color: var(--red-dark); }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 22px; border: none; border-radius: 8px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all .2s; font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-glow)); color: white;
+    box-shadow: 0 2px 8px rgba(184,134,11,.3);
+  }
+  .btn-primary:hover { box-shadow: 0 4px 16px rgba(184,134,11,.4); transform: translateY(-1px); }
+  .btn-danger { background: var(--red-light); color: var(--red-dark); }
+  .btn-danger:hover { background: var(--red); color: white; }
+  .btn-outline {
+    background: white; color: var(--gold-dark); border: 1.5px solid var(--gold);
+  }
+  .btn-outline:hover { background: var(--gold-light); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+  /* Toast */
+  .toast {
+    position: fixed; top: 20px; right: 20px; padding: 14px 24px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; z-index: 999; opacity: 0;
+    transition: opacity .3s; pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  }
+  .toast.show { opacity: 1; }
+  .toast.success { background: var(--success); color: white; }
+  .toast.error { background: var(--red); color: white; }
+
+  /* Metric rows */
+  .metric-row {
+    background: var(--warm-50); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;
+    border: 1px solid var(--cream-dark); position: relative;
+  }
+  .metric-row .form-grid { gap: 10px; }
+  .metric-delete {
+    position: absolute; top: 8px; right: 10px; background: none; border: none;
+    color: var(--red); cursor: pointer; font-size: 16px; font-weight: 700; padding: 2px 6px;
+  }
+  .metric-delete:hover { color: var(--red-dark); }
+
+  /* Book rows */
+  .book-edit-row {
+    background: var(--warm-50); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px;
+    border: 1px solid var(--cream-dark);
+  }
+  .book-edit-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--warm-900); }
+  .book-edit-row .form-grid { gap: 10px; }
+
+  /* Prediction display (read-only) */
+  .pred-row {
+    background: var(--warm-50); padding: 8px 14px; border-radius: 6px; margin-top: 8px;
+    font-size: 12px; color: var(--warm-700); display: flex; gap: 18px; flex-wrap: wrap;
+  }
+  .pred-row span { font-weight: 700; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 60px 24px; color: var(--warm-500);
+  }
+  .empty-state h3 { font-size: 18px; color: var(--warm-700); margin-bottom: 8px; }
+
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; min-width: unset; max-height: 200px; position: relative; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <div>
+      <h1>作者資訊編輯器</h1>
+      <div class="subtitle">編輯作者社群規模、書籍屬性、新增時間序列快照 — 修改即時寫入資料庫</div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <a class="back-link" href="author_models.html">校對總覽</a>
+      <a class="back-link" href="index.html">← 首頁</a>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-title">作者列表</div>
+    <div id="authorList"></div>
+    <button class="add-author-btn" id="addAuthorBtn">+ 新增作者</button>
+  </div>
+  <div class="main" id="mainContent">
+    <div class="empty-state">
+      <h3>選擇左側作者開始編輯</h3>
+      <p>或點擊「+ 新增作者」建立新的參考作者</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api';
+let authors = [];
+let currentId = null;
+
+const AUTHOR_TYPES = ['KOP', 'KOC', 'Co-Branding', 'Debut'];
+const PLATFORMS = ['YouTube', 'Instagram', 'Facebook', 'Course', 'App', 'Podcast', 'Blog'];
+const FORMATS = ['single', 'set', 'upper_lower'];
+const CATEGORIES = ['商業財經', '心靈成長', '生活風格', '親子教育', '健康養生'];
+
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+async function api(path, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  return res.json();
+}
+
+function fmt(v) { return v != null && v !== '' ? (typeof v === 'number' ? v.toLocaleString() : String(v)) : ''; }
+function isMissing(v) { return v == null || v === '' || v === 0; }
+
+async function loadAuthors() {
+  authors = await api('/authors');
+  renderSidebar();
+}
+
+function renderSidebar() {
+  const el = document.getElementById('authorList');
+  el.innerHTML = authors.map(a => {
+    const socialMissing = ['yt_subscribers','ig_followers','fb_followers','course_students','app_subscribers'].filter(f => isMissing(a[f])).length;
+    const badge = socialMissing > 0
+      ? `<span class="author-item-badge badge-missing">${socialMissing} 缺</span>`
+      : `<span class="author-item-badge badge-ok">OK</span>`;
+    return `<div class="author-item ${a.author_id === currentId ? 'active' : ''}" data-id="${a.author_id}">
+      <div>
+        <div class="author-item-name">${a.name}</div>
+        <div class="author-item-type">${a.author_type} · ${a.books.length} 本書</div>
+      </div>
+      ${badge}
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.author-item').forEach(item => {
+    item.addEventListener('click', () => selectAuthor(parseInt(item.dataset.id)));
+  });
+}
+
+function selectAuthor(id) {
+  currentId = id;
+  renderSidebar();
+  renderEditor();
+}
+
+function getAuthor() { return authors.find(a => a.author_id === currentId); }
+
+function renderEditor() {
+  const a = getAuthor();
+  if (!a) return;
+  const main = document.getElementById('mainContent');
+
+  const mentorOpts = authors.filter(x => x.author_id !== a.author_id)
+    .map(x => `<option value="${x.author_id}" ${a.mentor_author_id === x.author_id ? 'selected' : ''}>${x.name}</option>`).join('');
+
+  main.innerHTML = `
+    <!-- 基本資料 -->
+    <div class="form-section">
+      <div class="form-section-title">
+        基本資料
+        <span style="font-size:12px; color:var(--warm-500);">author_id: ${a.author_id}</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">作者名稱 <span class="required">*</span></label>
+          <input id="f_name" value="${a.name || ''}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">作者類型 <span class="required">*</span></label>
+          <select id="f_author_type">
+            ${AUTHOR_TYPES.map(t => `<option value="${t}" ${a.author_type===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">主要平台</label>
+          <select id="f_primary_platform">
+            <option value="">— 未選 —</option>
+            ${PLATFORMS.map(p => `<option value="${p}" ${a.primary_platform===p?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">權威評分 (0-10)</label>
+          <input id="f_authority_score" type="number" step="0.5" min="0" max="10" value="${a.authority_score ?? ''}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">過去出版書數</label>
+          <input id="f_previous_book_count" type="number" min="0" value="${a.previous_book_count ?? ''}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">導師作者 (Co-Branding)</label>
+          <select id="f_mentor_author_id">
+            <option value="">— 無 —</option>
+            ${mentorOpts}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">資料快照日期</label>
+          <input id="f_snapshot_date" type="date" value="${a.snapshot_date || ''}" />
+          <div class="field-hint">此快照代表社群規模的抓取時間</div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">備註</label>
+          <textarea id="f_notes">${a.notes || ''}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 社群規模 -->
+    <div class="form-section">
+      <div class="form-section-title">
+        社群規模
+        <span style="font-size:11px; color:var(--warm-500);">影響三層疊代模型的受眾基數</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">YouTube 訂閱數</label>
+          <input id="f_yt_subscribers" type="number" min="0" value="${a.yt_subscribers || ''}" class="${isMissing(a.yt_subscribers)?'missing-field':''}"/>
+          <div class="field-hint ${isMissing(a.yt_subscribers)?'warn':''}">中層受眾計算基數</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instagram 粉絲數</label>
+          <input id="f_ig_followers" type="number" min="0" value="${a.ig_followers || ''}" class="${isMissing(a.ig_followers)?'missing-field':''}"/>
+          <div class="field-hint ${isMissing(a.ig_followers)?'warn':''}">中層受眾計算基數</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Facebook 粉絲數</label>
+          <input id="f_fb_followers" type="number" min="0" value="${a.fb_followers || ''}" class="${isMissing(a.fb_followers)?'missing-field':''}"/>
+          <div class="field-hint ${isMissing(a.fb_followers)?'warn':''}">中層受眾（個人粉專）</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">同學會粉絲數 (CMoney)</label>
+          <input id="f_cmoney_followers" type="number" min="0" value="${a.cmoney_followers || ''}" />
+          <div class="field-hint">股市爆料同學會 — CMoney 社群平台</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">課程學員數</label>
+          <input id="f_course_students" type="number" min="0" value="${a.course_students || ''}" />
+          <div class="field-hint">內層受眾（最高 CR）</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">App 訂閱者</label>
+          <input id="f_app_subscribers" type="number" min="0" value="${a.app_subscribers || ''}" />
+          <div class="field-hint">內層受眾（最高 CR）</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveAuthor()">儲存作者資料</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAuthor()">刪除作者</button>
+      </div>
+    </div>
+
+    <!-- 時間序列快照 -->
+    <div class="form-section">
+      <div class="form-section-title">
+        社群規模時間序列
+        <button class="btn btn-outline btn-sm" onclick="addMetricRow()">+ 新增快照</button>
+      </div>
+      <div id="metricsArea">
+        ${a.metrics_history.length ? a.metrics_history.map(renderMetricRow).join('') :
+          '<div class="field-hint warn" style="padding:12px;">尚無快照。建議至少新增「出書當下」與「目前」兩筆，以便模型使用正確時間點的粉絲數。</div>'}
+      </div>
+      <div id="newMetrics"></div>
+    </div>
+
+    <!-- 書籍 -->
+    <div class="form-section">
+      <div class="form-section-title">
+        相關書籍 (${a.books.length})
+        <button class="btn btn-outline btn-sm" onclick="addBookRow()">+ 新增書籍</button>
+      </div>
+      <div id="booksArea">
+        ${a.books.length ? a.books.map(renderBookRow).join('') :
+          '<div class="field-hint" style="padding:12px;">尚無書籍紀錄</div>'}
+      </div>
+      <div id="newBooks"></div>
+    </div>
+  `;
+}
+
+function renderMetricRow(m) {
+  return `<div class="metric-row" data-metric-id="${m.metric_id}">
+    <button class="metric-delete" onclick="deleteMetric(${m.metric_id})" title="刪除">×</button>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">快照日期</label><span style="font-size:14px;font-weight:700;">${m.snapshot_date}</span></div>
+      <div class="form-group"><label class="form-label">YouTube</label><span style="font-size:14px;">${fmt(m.yt_subscribers) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">Instagram</label><span style="font-size:14px;">${fmt(m.ig_followers) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">Facebook</label><span style="font-size:14px;">${fmt(m.fb_followers) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">同學會</label><span style="font-size:14px;">${fmt(m.cmoney_followers) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">課程學員</label><span style="font-size:14px;">${fmt(m.course_students) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">Google Trends</label><span style="font-size:14px;">${fmt(m.google_trends_index) || '—'}</span></div>
+      <div class="form-group"><label class="form-label">互動率</label><span style="font-size:14px;">${fmt(m.engagement_rate) || '—'}</span></div>
+    </div>
+    ${m.notes ? `<div class="field-hint" style="margin-top:6px;">備註: ${m.notes}</div>` : ''}
+  </div>`;
+}
+
+function addMetricRow() {
+  const area = document.getElementById('newMetrics');
+  const today = new Date().toISOString().split('T')[0];
+  const idx = area.children.length;
+  const div = document.createElement('div');
+  div.className = 'metric-row';
+  div.innerHTML = `
+    <button class="metric-delete" onclick="this.parentElement.remove()" title="取消">×</button>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">快照日期 <span class="required">*</span></label><input class="nm_date" type="date" value="${today}" /></div>
+      <div class="form-group"><label class="form-label">YouTube</label><input class="nm_yt" type="number" min="0" /></div>
+      <div class="form-group"><label class="form-label">Instagram</label><input class="nm_ig" type="number" min="0" /></div>
+      <div class="form-group"><label class="form-label">Facebook</label><input class="nm_fb" type="number" min="0" /></div>
+      <div class="form-group"><label class="form-label">同學會</label><input class="nm_cmoney" type="number" min="0" /></div>
+      <div class="form-group"><label class="form-label">課程學員</label><input class="nm_course" type="number" min="0" /></div>
+      <div class="form-group"><label class="form-label">Google Trends</label><input class="nm_trends" type="number" min="0" step="0.1" /></div>
+      <div class="form-group"><label class="form-label">互動率</label><input class="nm_eng" type="number" min="0" step="0.001" /></div>
+      <div class="form-group full"><label class="form-label">備註</label><input class="nm_notes" /></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary btn-sm" onclick="saveMetric(this)">儲存此快照</button></div>
+  `;
+  area.appendChild(div);
+}
+
+async function saveMetric(btn) {
+  const row = btn.closest('.metric-row');
+  const data = {
+    author_id: currentId,
+    snapshot_date: row.querySelector('.nm_date').value,
+    yt_subscribers: parseInt(row.querySelector('.nm_yt').value) || 0,
+    ig_followers: parseInt(row.querySelector('.nm_ig').value) || 0,
+    fb_followers: parseInt(row.querySelector('.nm_fb').value) || 0,
+    cmoney_followers: parseInt(row.querySelector('.nm_cmoney').value) || 0,
+    course_students: parseInt(row.querySelector('.nm_course').value) || 0,
+    google_trends_index: parseFloat(row.querySelector('.nm_trends').value) || null,
+    engagement_rate: parseFloat(row.querySelector('.nm_eng').value) || null,
+    notes: row.querySelector('.nm_notes').value || null,
+  };
+  if (!data.snapshot_date) return toast('請填寫快照日期', 'error');
+  await api('/metrics', 'POST', data);
+  toast('快照已新增');
+  await loadAuthors();
+  renderEditor();
+}
+
+async function deleteMetric(id) {
+  if (!confirm('確定刪除此快照？')) return;
+  await api(`/metrics/${id}`, 'DELETE');
+  toast('快照已刪除');
+  await loadAuthors();
+  renderEditor();
+}
+
+function renderBookRow(b) {
+  const pred = b.prediction;
+  return `<div class="book-edit-row">
+    <div class="book-edit-title">${b.title} <span style="font-size:11px;color:var(--warm-500);">book_id: ${b.book_id}${b.product_id ? ' · ' + b.product_id : ''}</span></div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">商品ID</label><input class="bf_pid" data-bid="${b.book_id}" value="${b.product_id || ''}" placeholder="如 B0000123" /></div>
+      <div class="form-group"><label class="form-label">書名</label><input class="bf_title" data-bid="${b.book_id}" value="${b.title || ''}" /></div>
+      <div class="form-group"><label class="form-label">大類</label><input class="bf_category" data-bid="${b.book_id}" value="${b.category || ''}" /></div>
+      <div class="form-group"><label class="form-label">細分類</label><input class="bf_subcategory" data-bid="${b.book_id}" value="${b.subcategory || ''}" /></div>
+      <div class="form-group"><label class="form-label">定價 (NT$)</label><input class="bf_price" data-bid="${b.book_id}" type="number" value="${b.price_ntd ?? ''}" /></div>
+      <div class="form-group"><label class="form-label">頁數</label><input class="bf_pages" data-bid="${b.book_id}" type="number" value="${b.page_count ?? ''}" /></div>
+      <div class="form-group"><label class="form-label">格式</label>
+        <select class="bf_format" data-bid="${b.book_id}">
+          ${FORMATS.map(f => `<option value="${f}" ${b.format===f?'selected':''}>${f}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">出版日期</label><input class="bf_publish" data-bid="${b.book_id}" type="date" value="${b.publish_date || ''}" /></div>
+      <div class="form-group"><label class="form-label">首印量</label><input class="bf_print_run" data-bid="${b.book_id}" type="number" value="${b.first_print_run ?? ''}" class="${isMissing(b.first_print_run)?'missing-field':''}" /></div>
+      <div class="form-group"><label class="form-label">出版時類型</label>
+        <select class="bf_atype" data-bid="${b.book_id}">
+          <option value="">—</option>
+          ${AUTHOR_TYPES.map(t => `<option value="${t}" ${b.author_type_at_publish===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">是否續作</label>
+        <select class="bf_sequel" data-bid="${b.book_id}">
+          <option value="0" ${!b.is_sequel?'selected':''}>否</option>
+          <option value="1" ${b.is_sequel?'selected':''}>是</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">第 N 本書</label><input class="bf_nth" data-bid="${b.book_id}" type="number" min="1" value="${b.nth_book ?? ''}" /></div>
+      <div class="form-group full"><label class="form-label">備註</label><input class="bf_notes" data-bid="${b.book_id}" value="${b.notes || ''}" /></div>
+    </div>
+    ${pred ? `<div class="pred-row">
+      預測: <span>${fmt(pred.sales_fy_low)}~${fmt(pred.sales_fy_high)}</span>
+      實際: <span>${fmt(pred.actual_fy_sales) || '—'}</span>
+      誤差: <span>${pred.error_pct_fy != null ? pred.error_pct_fy + '%' : '—'}</span>
+      (${pred.model_version}, ${pred.predicted_date})
+    </div>` : ''}
+    <div class="btn-row"><button class="btn btn-primary btn-sm" onclick="saveBook(${b.book_id})">儲存此書</button></div>
+  </div>`;
+}
+
+function addBookRow() {
+  const area = document.getElementById('newBooks');
+  const div = document.createElement('div');
+  div.className = 'book-edit-row';
+  div.innerHTML = `
+    <div class="book-edit-title" style="color:var(--gold-dark);">新增書籍</div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">商品ID</label><input class="nb_pid" placeholder="如 B0000123" /></div>
+      <div class="form-group"><label class="form-label">書名 <span class="required">*</span></label><input class="nb_title" /></div>
+      <div class="form-group"><label class="form-label">大類</label><input class="nb_category" value="商業財經" /></div>
+      <div class="form-group"><label class="form-label">細分類</label><input class="nb_subcategory" /></div>
+      <div class="form-group"><label class="form-label">定價 (NT$)</label><input class="nb_price" type="number" /></div>
+      <div class="form-group"><label class="form-label">頁數</label><input class="nb_pages" type="number" /></div>
+      <div class="form-group"><label class="form-label">格式</label>
+        <select class="nb_format">${FORMATS.map(f => `<option value="${f}">${f}</option>`).join('')}</select>
+      </div>
+      <div class="form-group"><label class="form-label">出版日期</label><input class="nb_publish" type="date" /></div>
+      <div class="form-group"><label class="form-label">首印量</label><input class="nb_print_run" type="number" /></div>
+      <div class="form-group"><label class="form-label">出版時類型</label>
+        <select class="nb_atype"><option value="">—</option>${AUTHOR_TYPES.map(t => `<option value="${t}">${t}</option>`).join('')}</select>
+      </div>
+      <div class="form-group"><label class="form-label">是否續作</label>
+        <select class="nb_sequel"><option value="0">否</option><option value="1">是</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">第 N 本書</label><input class="nb_nth" type="number" min="1" value="1" /></div>
+      <div class="form-group full"><label class="form-label">備註</label><input class="nb_notes" /></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary btn-sm" onclick="saveNewBook(this)">儲存新書</button>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.book-edit-row').remove()">取消</button>
+    </div>
+  `;
+  area.appendChild(div);
+}
+
+async function saveBook(bookId) {
+  const q = (cls) => document.querySelector(`.${cls}[data-bid="${bookId}"]`);
+  const data = {
+    product_id: q('bf_pid').value || null,
+    title: q('bf_title').value,
+    category: q('bf_category').value,
+    subcategory: q('bf_subcategory').value || null,
+    price_ntd: parseInt(q('bf_price').value) || null,
+    page_count: parseInt(q('bf_pages').value) || null,
+    format: q('bf_format').value,
+    publish_date: q('bf_publish').value || null,
+    first_print_run: parseInt(q('bf_print_run').value) || null,
+    author_type_at_publish: q('bf_atype').value || null,
+    is_sequel: parseInt(q('bf_sequel').value),
+    nth_book: parseInt(q('bf_nth').value) || null,
+    notes: q('bf_notes').value || null,
+  };
+  await api(`/books/${bookId}`, 'PUT', data);
+  toast('書籍已更新');
+  await loadAuthors();
+  renderEditor();
+}
+
+async function saveNewBook(btn) {
+  const row = btn.closest('.book-edit-row');
+  const data = {
+    author_id: currentId,
+    product_id: row.querySelector('.nb_pid').value || null,
+    title: row.querySelector('.nb_title').value,
+    category: row.querySelector('.nb_category').value || '商業財經',
+    subcategory: row.querySelector('.nb_subcategory').value || null,
+    price_ntd: parseInt(row.querySelector('.nb_price').value) || null,
+    page_count: parseInt(row.querySelector('.nb_pages').value) || null,
+    format: row.querySelector('.nb_format').value,
+    publish_date: row.querySelector('.nb_publish').value || null,
+    first_print_run: parseInt(row.querySelector('.nb_print_run').value) || null,
+    author_type_at_publish: row.querySelector('.nb_atype').value || null,
+    is_sequel: parseInt(row.querySelector('.nb_sequel').value),
+    nth_book: parseInt(row.querySelector('.nb_nth').value) || 1,
+    notes: row.querySelector('.nb_notes').value || null,
+  };
+  if (!data.title) return toast('請填寫書名', 'error');
+  await api('/books', 'POST', data);
+  toast('書籍已新增');
+  await loadAuthors();
+  renderEditor();
+}
+
+function collectAuthorData() {
+  const val = (id) => document.getElementById(id)?.value;
+  const numVal = (id) => { const v = val(id); return v !== '' && v != null ? Number(v) : null; };
+  return {
+    name: val('f_name'),
+    author_type: val('f_author_type'),
+    primary_platform: val('f_primary_platform') || null,
+    authority_score: numVal('f_authority_score'),
+    previous_book_count: numVal('f_previous_book_count'),
+    mentor_author_id: numVal('f_mentor_author_id'),
+    snapshot_date: val('f_snapshot_date') || null,
+    notes: val('f_notes') || null,
+    yt_subscribers: numVal('f_yt_subscribers') ?? 0,
+    ig_followers: numVal('f_ig_followers') ?? 0,
+    fb_followers: numVal('f_fb_followers') ?? 0,
+    cmoney_followers: numVal('f_cmoney_followers') ?? 0,
+    course_students: numVal('f_course_students') ?? 0,
+    app_subscribers: numVal('f_app_subscribers') ?? 0,
+  };
+}
+
+async function saveAuthor() {
+  const data = collectAuthorData();
+  if (!data.name) return toast('作者名稱為必填', 'error');
+  await api(`/authors/${currentId}`, 'PUT', data);
+  toast(`${data.name} 已儲存`);
+  await loadAuthors();
+  renderEditor();
+}
+
+async function deleteAuthor() {
+  const a = getAuthor();
+  if (!confirm(`確定刪除「${a.name}」及其所有書籍、預測紀錄和快照？此操作無法復原。`)) return;
+  await api(`/authors/${currentId}`, 'DELETE');
+  toast(`${a.name} 已刪除`);
+  currentId = null;
+  await loadAuthors();
+  document.getElementById('mainContent').innerHTML = '<div class="empty-state"><h3>選擇左側作者開始編輯</h3></div>';
+}
+
+document.getElementById('addAuthorBtn').addEventListener('click', async () => {
+  const name = prompt('新作者名稱：');
+  if (!name) return;
+  const today = new Date().toISOString().split('T')[0];
+  const row = await api('/authors', 'POST', {
+    name,
+    author_type: 'KOC',
+    snapshot_date: today,
+  });
+  toast(`${name} 已新增`);
+  await loadAuthors();
+  selectAuthor(row.author_id);
+});
+
+loadAuthors();
+</script>
+</body>
+</html>

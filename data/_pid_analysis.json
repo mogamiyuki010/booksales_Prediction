@@ -1,0 +1,397 @@
+{
+  "total_unique_pids": 2051,
+  "book_pids": 220,
+  "rows_without_pid": 1388,
+  "samples": [
+    {
+      "product_id": "020193",
+      "books": [
+        "存股致勝心理學加價購優惠活動"
+      ],
+      "authors": [
+        "孫悟天，孫太"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 15
+    },
+    {
+      "product_id": "B0000018",
+      "books": [
+        "波爾多尋訪"
+      ],
+      "authors": [
+        "0"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 1
+    },
+    {
+      "product_id": "B0000019",
+      "books": [
+        "基金贏家100招"
+      ],
+      "authors": [
+        "0"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 58
+    },
+    {
+      "product_id": "B0000020",
+      "books": [
+        "台北金融物語:內線國度"
+      ],
+      "authors": [
+        "0"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 104
+    },
+    {
+      "product_id": "B0000021",
+      "books": [
+        "台北金融物語-內線國度2"
+      ],
+      "authors": [
+        "0"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 1
+    },
+    {
+      "product_id": "B0000023",
+      "books": [
+        "抓住飆股輕鬆賺"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 265
+    },
+    {
+      "product_id": "B0000023S",
+      "books": [
+        "抓住飆股輕鬆賺(金尉)"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 8
+    },
+    {
+      "product_id": "B0000024",
+      "books": [
+        "抓住線圖 股民變股神"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 138
+    },
+    {
+      "product_id": "B0000024S",
+      "books": [
+        "抓住線圖股民變股神(金尉)"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 2000
+    },
+    {
+      "product_id": "B0000025",
+      "books": [
+        "房地產是一輩子的事"
+      ],
+      "authors": [
+        "張金鶚"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 29
+    },
+    {
+      "product_id": "B0000026",
+      "books": [
+        "投資女王-賺錢基金尋寶圖"
+      ],
+      "authors": [
+        "林寶珠"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 33
+    },
+    {
+      "product_id": "B0000027",
+      "books": [
+        "用窮滋味教出富小孩"
+      ],
+      "authors": [
+        "李佳蓉"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 43
+    },
+    {
+      "product_id": "B0000028S",
+      "books": [
+        "(絕版下架)源源不絕賺好股"
+      ],
+      "authors": [
+        "孫慶龍"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 252
+    },
+    {
+      "product_id": "B0000029",
+      "books": [
+        "巴菲特選股神功"
+      ],
+      "authors": [
+        "洪瑞泰、Easy"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 206
+    },
+    {
+      "product_id": "B0000029S",
+      "books": [
+        "巴菲特選股神功(金尉)"
+      ],
+      "authors": [
+        "洪瑞泰、Easy"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 110
+    },
+    {
+      "product_id": "B0000030",
+      "books": [
+        "抓住K線 獲利無限"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 130
+    },
+    {
+      "product_id": "B0000030S",
+      "books": [
+        "抓住K線獲利無限(金尉)"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 2207
+    },
+    {
+      "product_id": "B0000031",
+      "books": [
+        "多空大贏家"
+      ],
+      "authors": [
+        "洪守傑"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 26
+    },
+    {
+      "product_id": "B0000032",
+      "books": [
+        "看懂籌碼 股市賺大錢"
+      ],
+      "authors": [
+        "陳家豐"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 65
+    },
+    {
+      "product_id": "B0000033S",
+      "books": [
+        "不看盤投資術"
+      ],
+      "authors": [
+        "股魚"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 99
+    },
+    {
+      "product_id": "B0000034",
+      "books": [
+        "面試一次就上班"
+      ],
+      "authors": [
+        "版權書"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 4
+    },
+    {
+      "product_id": "B0000035",
+      "books": [
+        "輪轉到西藏"
+      ],
+      "authors": [
+        "林祐君"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 29
+    },
+    {
+      "product_id": "B0000036",
+      "books": [
+        "大晴天 賣傘天"
+      ],
+      "authors": [
+        "版權書"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 1
+    },
+    {
+      "product_id": "B0000037S",
+      "books": [
+        "6年存到300張股票"
+      ],
+      "authors": [
+        "陳重銘"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 190
+    },
+    {
+      "product_id": "B0000038S",
+      "books": [
+        "做對五個實戰步驟你就是賺錢高手(金尉)"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 2044
+    },
+    {
+      "product_id": "B0000038X",
+      "books": [
+        "朱家泓套書-抓住K線.抓住飆股.抓住線圖.賺錢高手"
+      ],
+      "authors": [
+        "朱家泓"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 25
+    },
+    {
+      "product_id": "B0000039",
+      "books": [
+        "5:2法則"
+      ],
+      "authors": [
+        "版權書"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 2
+    },
+    {
+      "product_id": "B0000040S",
+      "books": [
+        "第一份收入就投資"
+      ],
+      "authors": [
+        "林奇芬"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 53
+    },
+    {
+      "product_id": "B0000041",
+      "books": [
+        "就是這張表 抓住神買點"
+      ],
+      "authors": [
+        "董鍾祥"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 131
+    },
+    {
+      "product_id": "B0000042S",
+      "books": [
+        "你沒學到的巴菲特:股神默默在做的事"
+      ],
+      "authors": [
+        "闕又上"
+      ],
+      "cats": [
+        "紙本書"
+      ],
+      "records": 116
+    }
+  ]
+}
