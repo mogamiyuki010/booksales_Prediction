@@ -47,8 +47,34 @@
       <h2>新書銷量預測工具 v2.0</h2>
       <p>互動式預測工具<br>輸入作者與書籍資料，即時獲得銷量預測</p>
     </a>
+    <a class="card" href="author_models.html">
+      <div class="icon">&#128203;</div>
+      <h2>作者預估模型欄位校對</h2>
+      <p>資料庫參考作者總覽<br>社群規模 / 書籍屬性 / 時間序列快照校對</p>
+    </a>
+    <a class="card" href="author_editor.html" id="editor-card">
+      <div class="icon">&#9998;</div>
+      <h2>作者資訊編輯器</h2>
+      <p>輸入與修正作者資料<br>社群粉絲數 / 書籍屬性 / 時間序列快照</p>
+    </a>
   </div>
   <div class="footer">GEM v2.0 Three-Layer Prediction Model</div>
 </div>
+<script>
+(async function() {
+  const card = document.getElementById('editor-card');
+  try {
+    const r = await fetch('/api/author_types', { signal: AbortSignal.timeout(1500) });
+    if (!r.ok) throw 0;
+  } catch(e) {
+    card.removeAttribute('href');
+    card.style.opacity = '0.45';
+    card.style.cursor = 'not-allowed';
+    card.style.pointerEvents = 'none';
+    card.querySelector('h2').textContent += ' (本地限定)';
+    card.querySelector('p').textContent = '需要啟動本地 API 伺服器';
+  }
+})();
+</script>
 </body>
 </html>

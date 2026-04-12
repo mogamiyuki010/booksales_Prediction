@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作者預估模型欄位校對 - 金尉出版社</title>
+<style>
+  :root {
+    --gold: #b8860b;
+    --gold-dark: #996515;
+    --gold-light: #f5e6b8;
+    --gold-glow: #d4a517;
+    --cream: #faf6ed;
+    --cream-dark: #f0e8d4;
+    --red: #b22234;
+    --red-dark: #8b1a2b;
+    --red-light: #f8e0e4;
+    --red-soft: #d94452;
+    --success: #2e7d32;
+    --success-light: #e8f5e9;
+    --warning: #b8860b;
+    --warning-light: #fdf3d7;
+    --danger: #b22234;
+    --danger-light: #f8e0e4;
+    --warm-50: #fffdf7;
+    --warm-100: #faf6ed;
+    --warm-200: #f0e8d4;
+    --warm-300: #ddd0b0;
+    --warm-500: #9e8e6e;
+    --warm-700: #5c4a2a;
+    --warm-900: #3a2e1a;
+    --shadow: 0 2px 8px rgba(58,46,26,.08), 0 1px 3px rgba(58,46,26,.06);
+    --shadow-md: 0 4px 12px rgba(58,46,26,.10), 0 2px 4px rgba(58,46,26,.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    background: linear-gradient(160deg, #faf6ed 0%, #f5f0e3 40%, #f0e8d4 100%);
+    color: var(--warm-900);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, #3a2e1a 0%, #5c4a2a 40%, #7a6340 100%);
+    color: white;
+    padding: 32px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold-glow), var(--gold), var(--gold-glow), var(--red));
+  }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+  .header h1 {
+    font-size: 28px; font-weight: 800; margin-bottom: 6px; letter-spacing: 1px;
+    background: linear-gradient(135deg, #f5e6b8 0%, #d4a517 40%, #f5e6b8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .header .subtitle { font-size: 14px; opacity: .85; color: var(--cream); }
+  .header .meta { font-size: 12px; opacity: .55; margin-top: 8px; color: var(--warm-300); }
+  .back-link {
+    color: var(--cream); text-decoration: none; font-size: 13px; opacity: .75;
+    padding: 6px 14px; border: 1px solid rgba(245,230,184,.3); border-radius: 6px;
+    transition: all .2s;
+  }
+  .back-link:hover { opacity: 1; border-color: var(--gold-glow); background: rgba(212,165,23,.12); }
+  .container { max-width: 1400px; margin: 0 auto; padding: 28px 28px 60px; }
+
+  /* Toolbar */
+  .toolbar {
+    background: white; border-radius: 12px; padding: 20px 24px;
+    box-shadow: var(--shadow); margin-bottom: 24px;
+    display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+    border: 1px solid rgba(184,134,11,.08);
+  }
+  .toolbar label { font-size: 13px; color: var(--warm-700); font-weight: 600; }
+  .toolbar select, .toolbar input[type=text] {
+    padding: 8px 12px; border: 1.5px solid var(--warm-300); border-radius: 8px;
+    background: white; font-size: 14px; color: var(--warm-900); min-width: 160px;
+    font-family: inherit;
+  }
+  .toolbar select:focus, .toolbar input:focus { outline: none; border-color: var(--gold); }
+  .filter-pill {
+    padding: 6px 14px; border: 1.5px solid var(--warm-300); border-radius: 20px;
+    background: white; cursor: pointer; font-size: 12px; font-weight: 600;
+    transition: all .2s; color: var(--warm-700);
+  }
+  .filter-pill:hover { background: var(--gold-light); border-color: var(--gold); }
+  .filter-pill.active { background: linear-gradient(135deg, var(--red), var(--red-soft)); color: white; border-color: var(--red); }
+
+  /* Summary bar */
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .summary-card {
+    background: white; border-radius: 10px; padding: 16px 20px;
+    box-shadow: var(--shadow); border-left: 4px solid var(--gold);
+    border: 1px solid rgba(184,134,11,.08);
+  }
+  .summary-card.danger { border-left-color: var(--red); }
+  .summary-card.success { border-left-color: var(--success); }
+  .summary-label { font-size: 11px; color: var(--warm-500); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+  .summary-value { font-size: 24px; font-weight: 800; color: var(--warm-900); margin-top: 2px; }
+  .summary-sub { font-size: 12px; color: var(--warm-500); }
+
+  /* Author card */
+  .author-card {
+    background: white; border-radius: 12px; margin-bottom: 22px;
+    box-shadow: var(--shadow); border: 1px solid rgba(184,134,11,.08);
+    overflow: hidden;
+  }
+  .author-head {
+    padding: 20px 26px;
+    background: linear-gradient(135deg, var(--warm-50), white);
+    border-bottom: 1px solid var(--cream-dark);
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+  }
+  .author-head:hover { background: linear-gradient(135deg, var(--gold-light), var(--warm-50)); }
+  .author-head-main { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .author-name { font-size: 20px; font-weight: 800; color: var(--warm-900); }
+  .author-id { font-size: 11px; color: var(--warm-500); font-weight: 600; }
+  .author-head-meta { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--warm-500); flex-wrap: wrap; }
+  .author-toggle { font-size: 12px; color: var(--gold-dark); font-weight: 700; }
+  .author-body { padding: 24px 26px; display: none; }
+  .author-card.open .author-body { display: block; }
+  .author-card.open .author-toggle::after { content: ' ▲'; }
+  .author-card:not(.open) .author-toggle::after { content: ' ▼'; }
+
+  /* Tags */
+  .tag {
+    display: inline-block; padding: 3px 12px; border-radius: 5px;
+    font-size: 11px; font-weight: 700;
+  }
+  .tag-kop { background: var(--gold-light); color: var(--gold-dark); }
+  .tag-koc { background: var(--red-light); color: var(--red-dark); }
+  .tag-cb  { background: var(--success-light); color: var(--success); }
+  .tag-debut { background: var(--cream-dark); color: var(--warm-700); }
+  .tag-missing { background: var(--danger-light); color: var(--red-dark); border: 1px dashed var(--red); }
+  .tag-ok { background: var(--success-light); color: var(--success); }
+
+  /* Field grid */
+  .section-label {
+    font-size: 13px; font-weight: 800; color: var(--warm-700);
+    margin: 18px 0 10px; padding-bottom: 6px;
+    border-bottom: 1.5px solid var(--cream-dark);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .section-label:first-child { margin-top: 0; }
+  .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .field {
+    background: var(--warm-50); border-radius: 8px; padding: 10px 14px;
+    border: 1px solid var(--cream-dark);
+  }
+  .field.missing { background: var(--danger-light); border-color: var(--red); border-style: dashed; }
+  .field-label { font-size: 11px; color: var(--warm-500); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+  .field-value { font-size: 15px; font-weight: 700; color: var(--warm-900); margin-top: 2px; }
+  .field.missing .field-value { color: var(--red-dark); font-style: italic; }
+  .field-note { font-size: 11px; color: var(--warm-500); margin-top: 2px; }
+
+  /* Book list */
+  .book-row {
+    background: var(--warm-50); border-radius: 10px; padding: 14px 18px;
+    margin-bottom: 10px; border: 1px solid var(--cream-dark);
+  }
+  .book-title { font-size: 15px; font-weight: 700; color: var(--warm-900); margin-bottom: 4px; }
+  .book-sub { font-size: 12px; color: var(--warm-500); margin-bottom: 8px; }
+  .book-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px 14px; font-size: 12px; }
+  .book-fields div span { color: var(--warm-500); font-weight: 600; }
+  .book-fields div b { color: var(--warm-900); font-weight: 700; }
+  .missing-inline { color: var(--red-dark); font-style: italic; font-weight: 700; }
+
+  /* Metrics history table */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--cream-dark); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: white; }
+  th { background: var(--cream); padding: 9px 12px; text-align: left; font-weight: 700; font-size: 11px; color: var(--warm-700); text-transform: uppercase; letter-spacing: .3px; }
+  td { padding: 9px 12px; border-top: 1px solid var(--cream-dark); }
+  tr:hover td { background: var(--warm-50); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .empty-hint {
+    padding: 16px; text-align: center; background: var(--warm-50);
+    border: 1px dashed var(--warm-300); border-radius: 8px;
+    font-size: 13px; color: var(--warm-500);
+  }
+
+  /* Model fields reference */
+  .ref-box {
+    background: var(--warm-50); border: 1px solid var(--cream-dark);
+    border-radius: 10px; padding: 18px 22px; font-size: 13px;
+    color: var(--warm-700); margin-top: 14px; line-height: 1.8;
+  }
+  .ref-box h4 { font-size: 14px; color: var(--warm-900); margin-bottom: 8px; }
+  .ref-box ul { margin: 4px 0 10px 18px; }
+
+  .footer {
+    text-align: center; padding: 24px; font-size: 12px; color: var(--warm-500);
+    border-top: 2px solid var(--cream-dark); margin-top: 36px;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--warm-300); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <div>
+      <h1>作者預估模型欄位校對</h1>
+      <div class="subtitle">資料庫參考作者 · 所有影響預測的欄位一覽 · 供人工校對修正</div>
+      <div class="meta" id="metaLine">載入中...</div>
+    </div>
+    <a class="back-link" href="author_editor.html">✎ 前往編輯</a>
+    <a class="back-link" href="index.html">← 返回首頁</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="summary-row" id="summaryRow"></div>
+
+  <div class="toolbar">
+    <label>作者類型</label>
+    <div id="typeFilters" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+    <label style="margin-left: 12px;">搜尋</label>
+    <input type="text" id="searchBox" placeholder="作者名 / 書名 / 分類...">
+    <button class="filter-pill" id="expandAll" style="margin-left: auto;">全部展開</button>
+    <button class="filter-pill" id="collapseAll">全部收合</button>
+  </div>
+
+  <div id="authorList"></div>
+
+  <div class="ref-box">
+    <h4>校對欄位說明 — 哪些欄位會影響銷量預測？</h4>
+    <p>本頁列出的所有欄位都是 GEM v2.0 模型的輸入。若有標記為「缺失」的欄位，代表該筆資料未填入，模型會以預設值推估，誤差可能擴大。請使用者依實際來源（FB/YT/IG 後台、課程後台、出版合約）校對並補齊。</p>
+    <ul>
+      <li><b>社群規模（yt/ig/fb/course/app）</b>：三層疊代模型的中/外層受眾基數，直接影響爆發量與總銷量上限。</li>
+      <li><b>snapshot_date</b>：該筆社群規模的抓取日期。出書前 0-3 個月內的快照最能反映真實行銷基礎。</li>
+      <li><b>author_metrics_history</b>：多個時間點的快照，可用來觀察粉絲成長速度，並在模型中套入「出書當下」而非「今日」的粉絲數。</li>
+      <li><b>author_type / authority_score</b>：決定衰退率（0.18~0.35）、趨勢乘數、首月爆發中位數。</li>
+      <li><b>previous_book_count / nth_book</b>：第 N 本書衰減係數（預設 0.92），影響長銷型作者的後續新書。</li>
+      <li><b>is_sequel / predecessor_book_id</b>：續作折扣係數 0.70。</li>
+      <li><b>price_ntd</b>：定價 ≥ NT$600 時套用高價書加成 1.10。</li>
+      <li><b>format</b>：套書/上下冊會影響印量與銷量的單位。</li>
+      <li><b>mentor_author_id</b>：Co-Branding 作者的導師前作銷量會作為預測上限（60-70%）。</li>
+      <li><b>first_print_run</b>：實際首印量，用於回測與印量決策驗證。</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    GEM v2.0 · 資料來源 <code>db/booksales.db</code> · 若要重新產生本頁資料，執行 <code>python db/export_author_models.py</code>
+  </div>
+</div>
+
+<script>
+const TYPE_LABELS = {
+  'KOP': { label: '頂級 KOP / 長銷王', cls: 'tag-kop' },
+  'KOC': { label: '社群 KOC / 速爆型', cls: 'tag-koc' },
+  'Co-Branding': { label: 'Co-Branding / 系統繼承', cls: 'tag-cb' },
+  'Debut': { label: '新人作者', cls: 'tag-debut' },
+};
+
+const SOCIAL_FIELDS = [
+  { key: 'yt_subscribers', label: 'YouTube 訂閱' },
+  { key: 'ig_followers', label: 'Instagram 粉絲' },
+  { key: 'fb_followers', label: 'Facebook 粉絲' },
+  { key: 'cmoney_followers', label: '同學會粉絲' },
+  { key: 'course_students', label: '課程學員' },
+  { key: 'app_subscribers', label: 'App 訂閱' },
+];
+
+const BOOK_FIELDS = [
+  { key: 'product_id', label: '商品ID' },
+  { key: 'category', label: '大類' },
+  { key: 'subcategory', label: '細分類' },
+  { key: 'price_ntd', label: '定價 (NT$)' },
+  { key: 'format', label: '格式' },
+  { key: 'publish_date', label: '出版日期' },
+  { key: 'first_print_run', label: '首印量' },
+  { key: 'author_type_at_publish', label: '出版時類型' },
+  { key: 'is_sequel', label: '是否續作' },
+  { key: 'nth_book', label: '第 N 本書' },
+];
+
+const state = {
+  data: null,
+  typeFilter: 'ALL',
+  search: '',
+};
+
+const fmt = (v) => v == null || v === '' ? null : (typeof v === 'number' ? v.toLocaleString() : String(v));
+const isMissing = (v) => v == null || v === '' || v === 0;
+
+async function load() {
+  // 優先嘗試 API（即時），fallback 到靜態 JSON
+  let authors, source = '靜態 JSON';
+  try {
+    const apiRes = await fetch('/api/authors', { signal: AbortSignal.timeout(2000) });
+    if (apiRes.ok) {
+      authors = await apiRes.json();
+      source = 'API 即時';
+    }
+  } catch(e) {}
+  if (!authors) {
+    const res = await fetch('data/author_models.json?t=' + Date.now());
+    const json = await res.json();
+    authors = json.authors;
+  }
+  state.data = { authors };
+  const now = new Date().toLocaleString('zh-TW');
+  document.getElementById('metaLine').textContent =
+    `資料來源: ${source} · ${now} · 作者 ${authors.length} 位`;
+  renderSummary();
+  renderFilters();
+  render();
+}
+
+function renderSummary() {
+  const authors = state.data.authors;
+  const totalBooks = authors.reduce((s, a) => s + a.books.length, 0);
+  let missingFields = 0;
+  let missingSocial = 0;
+  authors.forEach(a => {
+    SOCIAL_FIELDS.forEach(f => { if (isMissing(a[f.key])) { missingFields++; missingSocial++; } });
+    a.books.forEach(b => BOOK_FIELDS.forEach(f => { if (isMissing(b[f.key])) missingFields++; }));
+  });
+  const totalSnapshots = authors.reduce((s, a) => s + a.metrics_history.length, 0);
+
+  const cards = [
+    { label: '作者數量', value: authors.length, sub: '資料庫中參考作者', cls: '' },
+    { label: '書籍數量', value: totalBooks, sub: '含預測紀錄', cls: '' },
+    { label: '社群欄位缺失', value: missingSocial, sub: `${authors.length} 作者 × 5 欄位`, cls: missingSocial > 0 ? 'danger' : 'success' },
+    { label: '時間序列快照', value: totalSnapshots, sub: 'author_metrics_history', cls: totalSnapshots === 0 ? 'danger' : 'success' },
+    { label: '缺失欄位總計', value: missingFields, sub: '需人工校對補齊', cls: missingFields > 0 ? 'danger' : 'success' },
+  ];
+  document.getElementById('summaryRow').innerHTML = cards.map(c => `
+    <div class="summary-card ${c.cls}">
+      <div class="summary-label">${c.label}</div>
+      <div class="summary-value">${c.value.toLocaleString()}</div>
+      <div class="summary-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+function renderFilters() {
+  const types = ['ALL', ...new Set(state.data.authors.map(a => a.author_type))];
+  document.getElementById('typeFilters').innerHTML = types.map(t => {
+    const cnt = t === 'ALL' ? state.data.authors.length : state.data.authors.filter(a => a.author_type === t).length;
+    const label = t === 'ALL' ? '全部' : (TYPE_LABELS[t]?.label || t);
+    return `<button class="filter-pill ${state.typeFilter === t ? 'active' : ''}" data-type="${t}">${label} (${cnt})</button>`;
+  }).join('');
+  document.querySelectorAll('#typeFilters .filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.typeFilter = btn.dataset.type;
+      renderFilters();
+      render();
+    });
+  });
+}
+
+function render() {
+  const q = state.search.trim().toLowerCase();
+  const list = state.data.authors.filter(a => {
+    if (state.typeFilter !== 'ALL' && a.author_type !== state.typeFilter) return false;
+    if (!q) return true;
+    const hay = [a.name, a.notes, a.primary_platform, ...a.books.map(b => `${b.title} ${b.category} ${b.subcategory}`)].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+  document.getElementById('authorList').innerHTML = list.map(renderAuthor).join('') ||
+    '<div class="empty-hint">無符合條件的作者</div>';
+  document.querySelectorAll('.author-head').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+  });
+}
+
+function renderAuthor(a) {
+  const typeCls = TYPE_LABELS[a.author_type]?.cls || 'tag-debut';
+  const typeLabel = TYPE_LABELS[a.author_type]?.label || a.author_type;
+
+  const missingSocialCount = SOCIAL_FIELDS.filter(f => isMissing(a[f.key])).length;
+  const missingBadge = missingSocialCount > 0
+    ? `<span class="tag tag-missing">${missingSocialCount} 欄位缺失</span>`
+    : `<span class="tag tag-ok">✓ 完整</span>`;
+
+  const socialCards = SOCIAL_FIELDS.map(f => {
+    const missing = isMissing(a[f.key]);
+    return `<div class="field ${missing ? 'missing' : ''}">
+      <div class="field-label">${f.label}</div>
+      <div class="field-value">${missing ? '未填 / 0' : fmt(a[f.key])}</div>
+    </div>`;
+  }).join('');
+
+  const basicFields = [
+    { label: '主要平台', val: a.primary_platform },
+    { label: '過去出版書數', val: a.previous_book_count },
+    { label: '權威評分', val: a.authority_score },
+    { label: '資料快照日期', val: a.snapshot_date },
+    { label: '導師作者', val: a.mentor_name || (a.author_type === 'Co-Branding' ? null : '—') },
+  ];
+  const basicCards = basicFields.map(f => {
+    const missing = isMissing(f.val) && f.val !== '—';
+    return `<div class="field ${missing ? 'missing' : ''}">
+      <div class="field-label">${f.label}</div>
+      <div class="field-value">${missing ? '未填' : fmt(f.val)}</div>
+    </div>`;
+  }).join('');
+
+  const booksHtml = a.books.length ? a.books.map(renderBook).join('') :
+    '<div class="empty-hint">該作者目前無書籍紀錄</div>';
+
+  const historyHtml = a.metrics_history.length ? `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>快照日期</th><th class="num">YouTube</th><th class="num">Instagram</th>
+          <th class="num">Facebook</th><th class="num">同學會</th><th class="num">課程學員</th>
+          <th class="num">Google Trends</th><th class="num">互動率</th><th>備註</th>
+        </tr></thead>
+        <tbody>
+          ${a.metrics_history.map(m => `<tr>
+            <td>${m.snapshot_date}</td>
+            <td class="num">${fmt(m.yt_subscribers) ?? '—'}</td>
+            <td class="num">${fmt(m.ig_followers) ?? '—'}</td>
+            <td class="num">${fmt(m.fb_followers) ?? '—'}</td>
+            <td class="num">${fmt(m.cmoney_followers) ?? '—'}</td>
+            <td class="num">${fmt(m.course_students) ?? '—'}</td>
+            <td class="num">${fmt(m.google_trends_index) ?? '—'}</td>
+            <td class="num">${fmt(m.engagement_rate) ?? '—'}</td>
+            <td>${m.notes || ''}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : `
+    <div class="empty-hint">
+      <b>尚無時間序列快照</b><br>
+      建議在 <code>author_metrics_history</code> 表中為此作者新增至少兩筆紀錄：
+      <b>出書日前後</b>（行銷基礎）與<b>目前</b>（對照成長）。
+    </div>`;
+
+  return `
+    <div class="author-card">
+      <div class="author-head">
+        <div class="author-head-main">
+          <div>
+            <div class="author-name">${a.name}</div>
+            <div class="author-id">author_id: ${a.author_id}</div>
+          </div>
+          <span class="tag ${typeCls}">${typeLabel}</span>
+          ${missingBadge}
+          <div class="author-head-meta">
+            ${a.books.length} 本書 · ${a.metrics_history.length} 筆快照 · 平台 ${a.primary_platform || '未填'}
+          </div>
+        </div>
+        <div class="author-toggle">展開</div>
+      </div>
+      <div class="author-body">
+        <div class="section-label">基本資料</div>
+        <div class="field-grid">${basicCards}</div>
+        ${a.notes ? `<div class="field-note" style="margin-top:8px;">備註: ${a.notes}</div>` : ''}
+
+        <div class="section-label">社群規模（出書當下快照 ${a.snapshot_date || '未填'}）</div>
+        <div class="field-grid">${socialCards}</div>
+
+        <div class="section-label">時間序列快照 (author_metrics_history)</div>
+        ${historyHtml}
+
+        <div class="section-label">相關書籍（${a.books.length}）</div>
+        ${booksHtml}
+      </div>
+    </div>`;
+}
+
+function renderBook(b) {
+  const cell = (f) => {
+    const missing = isMissing(b[f.key]);
+    return `<div><span>${f.label}:</span> ${missing ? '<span class="missing-inline">缺失</span>' : `<b>${fmt(b[f.key])}</b>`}</div>`;
+  };
+  const pred = b.prediction;
+  const predHtml = pred ? `
+    <div class="book-fields" style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--cream-dark);">
+      <div><span>預測版本:</span> <b>${pred.model_version}</b></div>
+      <div><span>預測日期:</span> <b>${pred.predicted_date}</b></div>
+      <div><span>首年預測:</span> <b>${fmt(pred.sales_fy_low) || '—'} ~ ${fmt(pred.sales_fy_high) || '—'}</b></div>
+      <div><span>實際首年:</span> <b>${fmt(pred.actual_fy_sales) || '—'}</b></div>
+      <div><span>誤差 %:</span> <b>${pred.error_pct_fy != null ? pred.error_pct_fy + '%' : '—'}</b></div>
+    </div>` : '<div class="field-note" style="margin-top:6px;">尚無預測紀錄</div>';
+
+  return `<div class="book-row">
+    <div class="book-title">${b.title} <span class="author-id">book_id: ${b.book_id}</span></div>
+    <div class="book-sub">${b.notes || ''}</div>
+    <div class="book-fields">${BOOK_FIELDS.map(cell).join('')}</div>
+    ${predHtml}
+  </div>`;
+}
+
+document.getElementById('searchBox').addEventListener('input', (e) => {
+  state.search = e.target.value;
+  render();
+});
+document.getElementById('expandAll').addEventListener('click', () => {
+  document.querySelectorAll('.author-card').forEach(c => c.classList.add('open'));
+});
+document.getElementById('collapseAll').addEventListener('click', () => {
+  document.querySelectorAll('.author-card').forEach(c => c.classList.remove('open'));
+});
+
+load().catch(err => {
+  document.getElementById('authorList').innerHTML =
+    `<div class="empty-hint" style="color:var(--red-dark);">
+      載入失敗: ${err.message}<br>
+      本頁需透過 HTTP server 開啟（不能直接雙擊 html 檔）。<br>
+      建議執行: <code>python -m http.server 8000</code>
+    </div>`;
+});
+</script>
+</body>
+</html>
