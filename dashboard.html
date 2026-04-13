@@ -318,11 +318,11 @@
       <h3>各年度紙本書 TOP 5 暢銷書</h3>
       <div id="yearlyTop5">
         <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-          <button class="year-btn active" onclick="showYear(2022)">2022</button>
-          <button class="year-btn" onclick="showYear(2023)">2023</button>
-          <button class="year-btn" onclick="showYear(2024)">2024</button>
-          <button class="year-btn" onclick="showYear(2025)">2025</button>
-          <button class="year-btn" onclick="showYear(2026)">2026 Q1</button>
+          <button class="year-btn active" onclick="showYear(2022,event)">2022</button>
+          <button class="year-btn" onclick="showYear(2023,event)">2023</button>
+          <button class="year-btn" onclick="showYear(2024,event)">2024</button>
+          <button class="year-btn" onclick="showYear(2025,event)">2025</button>
+          <button class="year-btn" onclick="showYear(2026,event)">2026 Q1</button>
         </div>
         <table>
           <thead><tr><th>#</th><th>書名</th><th>作者</th><th class="num">年度銷量</th></tr></thead>
@@ -895,9 +895,15 @@ BACKTEST.forEach(d => {
 });
 
 // Yearly TOP5 tab logic
-window.showYear = function(year) {
+window.showYear = function(year, evt) {
   document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (evt && evt.target) {
+    evt.target.classList.add('active');
+  } else {
+    // Default call — mark first button as active
+    const firstBtn = document.querySelector('.year-btn');
+    if (firstBtn) firstBtn.classList.add('active');
+  }
   const top5Body = document.getElementById('top5Body');
   top5Body.innerHTML = '';
   (YEARLY_TOP5[year] || YEARLY_TOP5[String(year)] || []).forEach((d,i) => {
